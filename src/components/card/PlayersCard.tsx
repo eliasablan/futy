@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 import CollapsibleCard from "~/components/card/CollapsibleCard";
 import {
@@ -33,7 +34,11 @@ export default async function PlayersCard({
         <TableBody>
           {players?.map((player) => (
             <TableRow key={player.id}>
-              <TableCell>{player.name}</TableCell>
+              <TableCell>
+                <Link href={`/dashboard/players/${player.id}`}>
+                  {player.name}
+                </Link>
+              </TableCell>
               <TableCell>
                 {player.position === "Goalkeeper"
                   ? "GK"
@@ -53,35 +58,35 @@ export default async function PlayersCard({
           ))}
         </TableBody>
       </Table>
-      {/* <div className="mx-auto mt-2 grid w-full grid-cols-2 justify-items-center gap-2 xs:grid-cols-3 md:grid-cols-4 lg:grid-cols-3">
-                {leagues &&
-                  leagues.map((league) => (
-                    <Button
-                      key={league.id}
-                      asChild
-                      variant="ghost"
-                      size="icon"
-                      className="flex h-32 w-full flex-col justify-center border px-2"
-                    >
-                      <Link
-                        className="flex flex-col text-center"
-                        href={`/leagues/${league.code}`}
-                      >
-                        {league.emblem && (
-                          <Image
-                            src={league.emblem}
-                            alt={league.name}
-                            width={40}
-                            height={40}
-                          />
-                        )}
-                        <span className="mt-2 w-full overflow-hidden text-ellipsis text-wrap">
-                          {league.name ? league.name : 'Not found'}
-                        </span>
-                      </Link>
-                    </Button>
-                  ))}
-              </div> */}
+      {/* <div className="xs:grid-cols-3 mx-auto mt-2 grid w-full grid-cols-2 justify-items-center gap-2 md:grid-cols-4 lg:grid-cols-3">
+        {leagues &&
+          leagues.map((league) => (
+            <Button
+              key={league.id}
+              asChild
+              variant="ghost"
+              size="icon"
+              className="flex h-32 w-full flex-col justify-center border px-2"
+            >
+              <Link
+                className="flex flex-col text-center"
+                href={`/leagues/${league.code}`}
+              >
+                {league.emblem && (
+                  <Image
+                    src={league.emblem}
+                    alt={league.name}
+                    width={40}
+                    height={40}
+                  />
+                )}
+                <span className="mt-2 w-full overflow-hidden text-ellipsis text-wrap">
+                  {league.name ? league.name : "Not found"}
+                </span>
+              </Link>
+            </Button>
+          ))}
+      </div> */}
     </CollapsibleCard>
   );
 }
