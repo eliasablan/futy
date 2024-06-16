@@ -81,7 +81,7 @@ export default function MatchesCard({
   };
 
   return (
-    <CollapsibleCard title="Games" className={className}>
+    <CollapsibleCard title="Matches" className={className}>
       {fetchError && (
         <div className="col-span-full mb-3 text-center text-destructive">
           {fetchError}
@@ -205,7 +205,7 @@ export default function MatchesCard({
                       <p>Matchday #{match.season.currentMatchday}</p>
                       <p>{format(match.utcDate, "yyyy/MM/dd")}</p>
                       <Button className="mx-auto" variant="link" asChild>
-                        <Link href={`/dashboard/games/${match.id}`}>
+                        <Link href={`/dashboard/matches/${match.id}`}>
                           go to match page
                         </Link>
                       </Button>
@@ -240,7 +240,7 @@ export default function MatchesCard({
             </div>
           ) : (
             <div className="col-span-full text-center">
-              No games in the range
+              No matches in the range
             </div>
           )}
         </div>
