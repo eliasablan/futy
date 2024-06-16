@@ -23,15 +23,15 @@ export default async function CompetitionsCard({
               asChild
               variant="ghost"
               size="icon"
-              className="mx-auto flex h-auto w-full flex-col items-center justify-start gap-2 border p-2 text-center md:flex-row"
+              className="mx-auto flex h-auto w-full flex-col items-center justify-start gap-3 border px-3 py-2 text-center md:flex-row"
             >
               <Link href={`/dashboard/competitions/${competition.code}`}>
                 {competition.emblem && (
                   <Image
                     src={competition.emblem}
                     alt={competition.name}
-                    width={40}
-                    height={40}
+                    width={30}
+                    height={30}
                   />
                 )}
                 <span className="w-auto overflow-hidden text-ellipsis text-wrap text-left">
