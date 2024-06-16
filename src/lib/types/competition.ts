@@ -1,0 +1,35 @@
+interface Area {
+  id: number;
+  name: string;
+  code: string;
+  flag?: string;
+}
+
+interface CurrentSeason {
+  id: number;
+  startDate: string;
+  endDate: string;
+  currentMatchday: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  winner: any;
+}
+
+export interface FetchCompetitions {
+  ok: boolean;
+  competitions?: FetchCompetition[];
+  code?: number;
+  message?: string;
+}
+
+export interface FetchCompetition {
+  id: number;
+  area: Area;
+  name: string;
+  code: string;
+  type: string;
+  emblem: string;
+  plan: string;
+  currentSeason: CurrentSeason;
+  numberOfAvailableSeasons: number;
+  lastUpdated: string;
+}

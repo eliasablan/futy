@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
   varchar,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -35,7 +36,7 @@ export const posts = createTable(
   (example) => ({
     createdByIdIdx: index("createdById_idx").on(example.createdById),
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
 
 export const users = createTable("user", {
@@ -77,7 +78,7 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("account_userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -100,7 +101,7 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -119,5 +120,56 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
+);
+
+export const teamFollowers = createTable(
+  "teamFollowers",
+  {
+    teamId: varchar("teamCode", { length: 55 }).notNull(),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    active: boolean("active").notNull().default(true),
+  },
+  (teamFollowers) => ({
+    teamIdIdx: index("teamFollowers_teamId_idx").on(teamFollowers.teamId),
+    userIdIdx: index("teamFollowers_userId_idx").on(teamFollowers.userId),
+  }),
+);
+
+export const competitionFollowers = createTable(
+  "competitionFollowers",
+  {
+    competitionId: varchar("competitionCode", { length: 55 }).notNull(),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    active: boolean("active").notNull().default(true),
+  },
+  (competitionFollowers) => ({
+    competitionIdIdx: index("competitionFollowers_competitionId_idx").on(
+      competitionFollowers.competitionId,
+    ),
+    userIdIdx: index("competitionFollowers_userId_idx").on(
+      competitionFollowers.userId,
+    ),
+  }),
+);
+
+export const playerFollowers = createTable(
+  "playerFollowers",
+  {
+    playerId: varchar("playerCode", { length: 55 }).notNull(),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    active: boolean("active").notNull().default(true),
+  },
+  (playerFollowers) => ({
+    playerIdIdx: index("playerFollowers_playerId_idx").on(
+      playerFollowers.playerId,
+    ),
+    userIdIdx: index("playerFollowers_userId_idx").on(playerFollowers.userId),
+  }),
 );
