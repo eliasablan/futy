@@ -197,33 +197,41 @@ export default function MatchesCard({
                       {match.awayTeam.shortName || match.awayTeam.name}
                     </p>
                   </AccordionTrigger>
-                  <AccordionContent className="flex flex-col bg-accent p-2 text-center text-accent-foreground">
-                    <div className="flex flex-col">
-                      <p className="text-base font-semibold">
-                        {match.competition.name}
-                      </p>
-                      <p>Matchday #{match.season.currentMatchday}</p>
-                      <p>{format(match.utcDate, "yyyy/MM/dd")}</p>
-                      <Button className="mx-auto" variant="link" asChild>
-                        <Link href={`/dashboard/matches/${match.id}`}>
-                          go to match page
-                        </Link>
-                      </Button>
-                    </div>
-                    {match.status === "FINISHED" && (
-                      <div className="grid grid-cols-2 pt-1">
-                        <p className="col-span-2 my-1 border-y-2 border-primary-foreground py-1 text-center text-base">
-                          Full time
+                  <AccordionContent className="pb-2" asChild>
+                    <Link
+                      href={`/dashboard/matches/${match.id}`}
+                      className="mx-auto flex w-2/3 flex-col py-2 text-center text-accent-foreground"
+                    >
+                      <div className="flex flex-col">
+                        <p className="text-base font-semibold">
+                          {match.competition.name}
                         </p>
-                        <p>{match.score.fullTime.home}</p>
-                        <p>{match.score.fullTime.away}</p>
-                        <p className="col-span-2 my-1 border-y-2 border-primary-foreground py-1 text-center text-base">
-                          Half time
-                        </p>
-                        <p>{match.score.halfTime.home}</p>
-                        <p>{match.score.halfTime.away}</p>
+                        <p>Matchday #{match.season.currentMatchday}</p>
+                        <p>{format(match.utcDate, "yyyy/MM/dd")}</p>
                       </div>
-                    )}
+                      {match.status === "FINISHED" && (
+                        <div className="grid grid-cols-2 pt-1">
+                          <p className="col-span-2 my-1 border-y border-primary border-b-accent text-center text-base">
+                            Full time
+                          </p>
+                          <p className="text-lg font-bold">
+                            {match.score.fullTime.home}
+                          </p>
+                          <p className="text-lg font-bold">
+                            {match.score.fullTime.away}
+                          </p>
+                          <p className="col-span-2 my-1 border-y border-primary border-b-accent text-center text-base">
+                            Half time
+                          </p>
+                          <p className="text-lg font-bold">
+                            {match.score.halfTime.home}
+                          </p>
+                          <p className="text-lg font-bold">
+                            {match.score.halfTime.away}
+                          </p>
+                        </div>
+                      )}
+                    </Link>
                   </AccordionContent>
                 </AccordionItem>
               ))}
