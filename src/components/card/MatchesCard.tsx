@@ -166,7 +166,7 @@ export default function MatchesCard({
                       className={cn(
                         "mx-auto w-16 rounded-md p-1",
                         match.status === "FINISHED" &&
-                          "bg-accent text-accent-foreground",
+                          "border-2 bg-accent text-accent-foreground",
                         match.status === "IN_PLAY" &&
                           "bg-success text-success-foreground",
                         match.status === "PAUSED" &&
@@ -177,7 +177,55 @@ export default function MatchesCard({
                           "bg-destructive text-destructive-foreground",
                       )}
                     >
-                      <p className="font-mono text-lg font-semibold leading-5">
+                      {match.status === "FINISHED" ? (
+                        <>
+                          <p className="font-mono text-lg font-semibold leading-5">
+                            {match.score.fullTime.home}
+                            {":"}
+                            {match.score.fullTime.away}
+                          </p>
+                          <p className="text-xs">FT</p>
+                        </>
+                      ) : match.status === "IN_PLAY" ? ( // Refactor
+                        <p className="font-mono text-4xl font-semibold">
+                          {match.score.fullTime.home}
+                        </p>
+                      ) : match.status === "PAUSED" ? ( // Refactor
+                        <p className="font-mono text-4xl font-semibold">
+                          {match.score.fullTime.home}
+                        </p>
+                      ) : match.status === "TIMED" ? (
+                        <>
+                          <p className="font-mono text-lg font-semibold leading-5">
+                            {formatearFecha({
+                              fechaISO: match.utcDate,
+                              format: "HH:mm",
+                            })}
+                          </p>
+                          <p className="text-xs">
+                            {formatearFecha({
+                              fechaISO: match.utcDate,
+                              format: "dd/MM/yy",
+                            })}
+                          </p>
+                        </>
+                      ) : match.status === "POSTPONED" ? (
+                        <>
+                          <p className="font-mono text-lg font-semibold leading-5">
+                            {formatearFecha({
+                              fechaISO: match.utcDate,
+                              format: "HH:mm",
+                            })}
+                          </p>
+                          <p className="text-xs">
+                            {formatearFecha({
+                              fechaISO: match.utcDate,
+                              format: "dd/MM/yy",
+                            })}
+                          </p>
+                        </>
+                      ) : null}
+                      {/* <p className="font-mono text-lg font-semibold leading-5">
                         {match.status === "TIMED" &&
                           formatearFecha({
                             fechaISO: match.utcDate,
@@ -199,7 +247,7 @@ export default function MatchesCard({
                           match.score.fullTime.home +
                             "-" +
                             match.score.fullTime.away}
-                      </p>
+                      </p> */}
                     </div>
                     <p className="flex items-center justify-start gap-2 text-ellipsis text-sm">
                       <Image
