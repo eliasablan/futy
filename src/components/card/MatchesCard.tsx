@@ -100,7 +100,7 @@ export default function MatchesCard({
                 <Button
                   id="date"
                   disabled={isLoading}
-                  variant={"outline"}
+                  variant="outline"
                   className={cn(
                     "justify-start text-left font-normal",
                     !dateRange && "text-muted-foreground",
@@ -162,8 +162,22 @@ export default function MatchesCard({
                         alt="Home Team Crest"
                       />
                     </p>
-                    <div>
-                      <p className="text-sm">
+                    <div
+                      className={cn(
+                        "mx-auto w-16 rounded-md p-1",
+                        match.status === "FINISHED" &&
+                          "bg-accent text-accent-foreground",
+                        match.status === "IN_PLAY" &&
+                          "bg-success text-success-foreground",
+                        match.status === "PAUSED" &&
+                          "bg-warning text-warning-foreground",
+                        match.status === "TIMED" &&
+                          "bg-primary text-primary-foreground",
+                        match.status === "POSTPONED" &&
+                          "bg-destructive text-destructive-foreground",
+                      )}
+                    >
+                      <p className="font-mono text-lg font-semibold leading-5">
                         {match.status === "TIMED" &&
                           formatearFecha({
                             fechaISO: match.utcDate,
@@ -178,7 +192,7 @@ export default function MatchesCard({
                         {match.status === "TIMED" &&
                           formatearFecha({
                             fechaISO: match.utcDate,
-                            format: "dd/MM/yyyy",
+                            format: "dd/MM/yy",
                           })}
                         {match.status !== "TIMED" &&
                           match.status !== "POSTPONED" &&
@@ -197,36 +211,39 @@ export default function MatchesCard({
                       {match.awayTeam.shortName || match.awayTeam.name}
                     </p>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-2" asChild>
+                  <AccordionContent className="bg-background/50 py-2" asChild>
                     <Link
                       href={`/dashboard/matches/${match.id}`}
-                      className="mx-auto flex w-2/3 flex-col py-2 text-center text-accent-foreground"
+                      className="mx-auto flex w-2/3 flex-col py-2 text-center"
                     >
-                      <div className="flex flex-col">
-                        <p className="text-base font-semibold">
-                          {match.competition.name}
+                      <div className="flex flex-col py-2">
+                        <p className="text-lg">{match.competition.name}</p>
+                        <p className="text-warning font-mono font-medium">
+                          Matchday #{match.season.currentMatchday}
                         </p>
-                        <p>Matchday #{match.season.currentMatchday}</p>
-                        <p>{format(match.utcDate, "yyyy/MM/dd")}</p>
+                        {match.status === "TIMED" ||
+                          (match.status === "POSTPONED" && (
+                            <p>{format(match.utcDate, "yyyy/MM/dd")}</p>
+                          ))}
                       </div>
                       {match.status === "FINISHED" && (
                         <div className="grid grid-cols-2 pt-1">
-                          <p className="col-span-2 my-1 border-y border-primary border-b-accent text-center text-base">
+                          <p className="col-span-2 my-1 border-b border-b-accent text-center text-sm">
                             Full time
                           </p>
-                          <p className="text-lg font-bold">
+                          <p className="font-mono text-4xl font-bold">
                             {match.score.fullTime.home}
                           </p>
-                          <p className="text-lg font-bold">
+                          <p className="font-mono text-4xl font-bold">
                             {match.score.fullTime.away}
                           </p>
-                          <p className="col-span-2 my-1 border-y border-primary border-b-accent text-center text-base">
+                          <p className="col-span-2 my-1 border-b border-b-accent text-center text-sm">
                             Half time
                           </p>
-                          <p className="text-lg font-bold">
+                          <p className="font-mono text-4xl font-bold">
                             {match.score.halfTime.home}
                           </p>
-                          <p className="text-lg font-bold">
+                          <p className="font-mono text-4xl font-bold">
                             {match.score.halfTime.away}
                           </p>
                         </div>

@@ -19,12 +19,12 @@ export default function CollapsibleCard({
   title?: string;
 }) {
   return (
-    <Card className={cn("h-fit ", className)}>
+    <Card className={cn("bg-muted/50", className)}>
       <Collapsible defaultOpen>
-        <CardHeader className="bg-muted/50 p-3 py-2">
+        <CardHeader className="p-3 py-2">
           <CollapsibleTrigger className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">{title}</CardTitle>
-            <CaretSortIcon className="h-6 w-6" />
+            <CaretSortIcon className="h-4 w-4" />
           </CollapsibleTrigger>
         </CardHeader>
         <CollapsibleContent>

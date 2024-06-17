@@ -5,6 +5,7 @@ import type {
 import type { FetchTeam, FetchTeams } from "~/lib/types/team";
 import type { FetchMatch } from "~/lib/types/match";
 import type { FetchStandings } from "~/lib/types/standing";
+import type { FetchPlayer } from "~/lib/types/player";
 
 // #region Competitions
 export const fetchCompetitions = async (): Promise<FetchCompetitions> => {
@@ -150,3 +151,25 @@ export const fetchStandings = async (code: string): Promise<FetchStandings> => {
   return data;
 };
 // #endregion
+
+// #region Players
+export const getPlayer = async (id: number): Promise<FetchPlayer> => {
+  const player_url = process.env.NEXT_PUBLIC_FBDO_URL + "persons/" + id;
+  const auth_token = process.env.NEXT_PUBLIC_FBDO_API_KEY ?? "";
+
+  const req = await fetch(player_url, {
+    headers: {
+      "X-Auth-Token": auth_token,
+    },
+    next: {
+      revalidate: 60,
+    },
+  });
+
+  if (!req.ok) {
+    throw new Error(`OK Error fetching ${id} player`);
+  }
+
+  const data = (await req.json()) as FetchPlayer;
+  return data;
+};

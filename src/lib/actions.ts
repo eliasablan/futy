@@ -31,16 +31,13 @@ export const fetchMatches = async ({
     headers: {
       "X-Auth-Token": auth_token,
     },
-    // next: {
-    //   revalidate: 60,
-    // },
+    next: {
+      revalidate: 60,
+    },
   });
 
-  // console.log({ req });
   const data = (await req.json()) as FetchMatches;
-  console.log({ data });
 
-  // const data = (await req.json()) as FetchMatches;
   data.ok = true;
   if (data.errorCode) {
     data.ok = false;
