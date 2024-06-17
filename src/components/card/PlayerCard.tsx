@@ -10,17 +10,24 @@ export default async function PlayerCard({
   player: FetchPlayer;
   className?: string;
 }) {
-  console.log({ player });
   return (
     <CollapsibleCard title="Player Information" className={className}>
       <div className="flex flex-col items-center">
-        <p className="mt-4 inline-flex gap-3 font-semibold">{player.name}</p>
-        <p className="pt-2">{player.position}</p>
-        <p className="pt-2">
+        <h2 className="mt-4 inline-flex gap-3 font-mono text-4xl font-semibold">
+          {player.name}
+        </h2>
+        <p className="pt-2 text-2xl text-primary">
+          <span className="font-semibold">Position: </span>
+          {player.position}
+        </p>
+        <p className="pt-2 text-xl">
+          <span className="font-semibold">Nacionalidad: </span>
+          {player.nationality}
+        </p>
+        <p className="pt-2 text-lg">
+          <span className="font-semibold">Fecha de nacimiento: </span>
           {player.dateOfBirth.substring(2).split("-").reverse().join("/")}
         </p>
-        <p className="pt-2">{player.nationality}</p>
-        <p className="pt-2">{player.dateOfBirth}</p>
       </div>
     </CollapsibleCard>
   );

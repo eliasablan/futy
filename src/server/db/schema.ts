@@ -39,15 +39,31 @@ export const posts = createTable(
   }),
 );
 
+export const bets = createTable("bet", {
+  id: serial("id").primaryKey(),
+  user_id: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  // team_id: varchar("team_id", { length: 255 })
+  //   .notNull()
+  //   .references(() => teams.id),
+  // match_id: varchar("match_id", { length: 255 })
+  //   .notNull()
+  //   .references(() => matches.id),
+  bet_type: varchar("bet_type", { length: 255 }).notNull(),
+  amount: varchar("amount", { length: 255 }).notNull(),
+  created_at: timestamp("created_at", { withTimezone: true }).notNull(),
+  updated_at: timestamp("updated_at", { withTimezone: true }),
+});
+
 export const users = createTable("user", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp("emailVerified", {
-    mode: "date",
-    withTimezone: true,
-  }).default(sql`CURRENT_TIMESTAMP`),
-  image: varchar("image", { length: 255 }),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name"),
+  email: text("email").notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -57,21 +73,19 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const accounts = createTable(
   "account",
   {
-    userId: varchar("userId", { length: 255 })
+    userId: text("userId")
       .notNull()
-      .references(() => users.id),
-    type: varchar("type", { length: 255 })
-      .$type<AdapterAccount["type"]>()
-      .notNull(),
-    provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
-    token_type: varchar("token_type", { length: 255 }),
-    scope: varchar("scope", { length: 255 }),
+    token_type: text("token_type"),
+    scope: text("scope"),
     id_token: text("id_token"),
-    session_state: varchar("session_state", { length: 255 }),
+    session_state: text("session_state"),
   },
   (account) => ({
     compoundKey: primaryKey({
@@ -88,16 +102,11 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
 export const sessions = createTable(
   "session",
   {
-    sessionToken: varchar("sessionToken", { length: 255 })
+    sessionToken: text("sessionToken").primaryKey(),
+    userId: text("userId")
       .notNull()
-      .primaryKey(),
-    userId: varchar("userId", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    expires: timestamp("expires", {
-      mode: "date",
-      withTimezone: true,
-    }).notNull(),
+      .references(() => users.id, { onDelete: "cascade" }),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
@@ -111,15 +120,35 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
 export const verificationTokens = createTable(
   "verificationToken",
   {
-    identifier: varchar("identifier", { length: 255 }).notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires", {
-      mode: "date",
-      withTimezone: true,
-    }).notNull(),
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
   },
-  (vt) => ({
-    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
+  (verificationToken) => ({
+    compositePk: primaryKey({
+      columns: [verificationToken.identifier, verificationToken.token],
+    }),
+  }),
+);
+
+export const authenticators = createTable(
+  "authenticator",
+  {
+    credentialID: text("credentialID").notNull().unique(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    providerAccountId: text("providerAccountId").notNull(),
+    credentialPublicKey: text("credentialPublicKey").notNull(),
+    counter: integer("counter").notNull(),
+    credentialDeviceType: text("credentialDeviceType").notNull(),
+    credentialBackedUp: boolean("credentialBackedUp").notNull(),
+    transports: text("transports"),
+  },
+  (authenticator) => ({
+    compositePK: primaryKey({
+      columns: [authenticator.userId, authenticator.credentialID],
+    }),
   }),
 );
 
