@@ -7,9 +7,10 @@ export interface FetchMatches {
   matches?: Match[];
   errorCode?: string;
 }
-export interface FetchMatch {
+
+export interface FetchMatch extends Match {
   ok: boolean;
-  code?: number;
+  errorCode?: number;
   message?: string;
   filters?: Filters;
   resultSet?: ResultSet;

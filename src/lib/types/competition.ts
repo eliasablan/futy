@@ -16,12 +16,24 @@ interface CurrentSeason {
 
 export interface FetchCompetitions {
   ok: boolean;
-  competitions?: FetchCompetition[];
-  code?: number;
+  errorCode?: number;
   message?: string;
+  count?: number;
+  filter?: Filter;
+  competitions?: FetchCompetition[];
+}
+
+interface Filter {
+  id?: number;
+  name?: string;
+  code?: string;
+  client?: string;
 }
 
 export interface FetchCompetition {
+  ok: boolean;
+  errorCode?: number;
+  message?: string;
   id: number;
   area: Area;
   name: string;

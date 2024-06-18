@@ -17,16 +17,16 @@ export const fetchCompetitions = async (): Promise<FetchCompetitions> => {
     headers: {
       "X-Auth-Token": auth_token,
     },
-    // next: {
-    //   revalidate: 60 * 60, // 1 hour
-    // },
+    next: {
+      revalidate: 60 * 60 * 24, // 1 day
+    },
   });
 
-  if (!res.ok) {
-    throw new Error("OK Error fetching competitions");
-  }
-
   const data = (await res.json()) as FetchCompetitions;
+  data.ok = true;
+  if (data.errorCode) {
+    data.ok = false;
+  }
   return data;
 };
 
@@ -45,11 +45,11 @@ export const fetchCompetition = async (
     },
   });
 
-  if (!req.ok) {
-    throw new Error(`OK Error fetching ${code} competition`);
-  }
-
   const data = (await req.json()) as FetchCompetition;
+  data.ok = true;
+  if (data.errorCode) {
+    data.ok = false;
+  }
   return data;
 };
 // #endregion
@@ -70,16 +70,16 @@ export const fetchTeams = async ({
     headers: {
       "X-Auth-Token": auth_token,
     },
-    // next: {
-    //   revalidate: 60 * 60 * 24, // 1 day
-    // },
+    next: {
+      revalidate: 60 * 60 * 24, // 1 day
+    },
   });
 
-  if (!req.ok) {
-    throw new Error("OK Error fetching teams");
-  }
-
   const data = (await req.json()) as FetchTeams;
+  data.ok = true;
+  if (data.errorCode) {
+    data.ok = false;
+  }
   return data;
 };
 
@@ -92,15 +92,15 @@ export const fetchTeam = async (id: number): Promise<FetchTeam> => {
       "X-Auth-Token": auth_token,
     },
     next: {
-      revalidate: 60 * 60 * 24, // 1 day
+      revalidate: 60 * 60, // 1 hour
     },
   });
 
-  if (!req.ok) {
-    throw new Error(`OK Error fetching ${id} team`);
-  }
-
   const data = (await req.json()) as FetchTeam;
+  data.ok = true;
+  if (data.errorCode) {
+    data.ok = false;
+  }
   return data;
 };
 // #endregion
@@ -115,15 +115,15 @@ export const fetchMatch = async (id: number): Promise<FetchMatch> => {
       "X-Auth-Token": auth_token,
     },
     next: {
-      revalidate: 60,
+      revalidate: 60, // 1 minute
     },
   });
 
-  if (!req.ok) {
-    throw new Error(`OK Error fetching match ${id}`);
-  }
-
   const data = (await req.json()) as FetchMatch;
+  data.ok = true;
+  if (data.errorCode) {
+    data.ok = false;
+  }
   return data;
 };
 // #endregion
@@ -139,15 +139,15 @@ export const fetchStandings = async (code: string): Promise<FetchStandings> => {
       "X-Auth-Token": auth_token,
     },
     next: {
-      revalidate: 600, // 10 minutes
+      revalidate: 60 * 10, // 10 minutes
     },
   });
 
-  if (!req.ok) {
-    throw new Error(`OK Error fetching ${code} standings`);
-  }
-
   const data = (await req.json()) as FetchStandings;
+  data.ok = true;
+  if (data.errorCode) {
+    data.ok = false;
+  }
   return data;
 };
 // #endregion
@@ -162,14 +162,15 @@ export const getPlayer = async (id: number): Promise<FetchPlayer> => {
       "X-Auth-Token": auth_token,
     },
     next: {
-      revalidate: 60,
+      revalidate: 60 * 60 * 24, // 1 day
     },
   });
 
-  if (!req.ok) {
-    throw new Error(`OK Error fetching ${id} player`);
-  }
-
   const data = (await req.json()) as FetchPlayer;
+  data.ok = true;
+  if (data.errorCode) {
+    data.ok = false;
+  }
   return data;
 };
+// #endregion

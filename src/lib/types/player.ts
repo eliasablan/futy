@@ -1,6 +1,9 @@
 import type { Area, Contract, RunningCompetition } from "./team";
 
 export interface FetchPlayer {
+  ok: boolean;
+  errorCode?: string;
+  message?: string;
   id: number;
   name: string;
   firstName: string;

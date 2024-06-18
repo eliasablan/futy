@@ -1,5 +1,7 @@
 export interface FetchTeams {
   ok: boolean;
+  errorCode?: string;
+  message?: string;
   count?: number;
   filter?: {
     limit?: number;
@@ -9,7 +11,11 @@ export interface FetchTeams {
   teams?: Team[];
 }
 
-export type FetchTeam = Team;
+export type FetchTeam = Team & {
+  ok: boolean;
+  errorCode?: string;
+  message?: string;
+};
 
 export interface Team {
   area: Area;

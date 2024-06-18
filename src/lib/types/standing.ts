@@ -1,4 +1,7 @@
 export interface FetchStandings {
+  ok: boolean;
+  errorCode?: string;
+  message?: string;
   filters: Filters;
   area: Area;
   competition: Competition;
