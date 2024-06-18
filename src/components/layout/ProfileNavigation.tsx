@@ -1,10 +1,8 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { User } from "lucide-react";
 
-import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
@@ -21,23 +19,19 @@ export default function ProfileNavigation() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="overflow-hidden rounded-full"
-        >
-          {!session ? (
-            <User className="h-5 w-5" />
-          ) : (
-            <Avatar className="h-6 w-6">
-              {session.user.image ? (
-                <AvatarImage src={session.user.image} />
-              ) : (
-                <AvatarFallback>CN</AvatarFallback>
-              )}
-            </Avatar>
-          )}
-        </Button>
+        {!session ? (
+          <User className="text-success-foreground bg-success h-8 w-8 rounded-full p-1" /> 
+        ) : (
+          <Avatar className="h-8 w-8">
+            {session.user.image ? (
+              <AvatarImage src={session.user.image} />
+            ) : (
+              <AvatarFallback className="text-success bg-success-foreground">
+                CN
+              </AvatarFallback>
+            )}
+          </Avatar>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>

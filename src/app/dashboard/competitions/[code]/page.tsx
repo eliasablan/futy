@@ -14,10 +14,10 @@ export default async function LeaguePage({
     <>
       <div className="col-span-2 flex flex-col gap-4 sm:col-span-2 md:col-span-3">
         <MatchesCard code={params.code} />
-        <StandingsCard code={params.code} />
       </div>
       <div className="col-span-2 flex flex-col gap-4 sm:col-span-2 md:col-span-2">
         <CompetitionCard league={competition} />
+        <StandingsCard code={params.code} />
       </div>
     </>
   );

@@ -37,14 +37,27 @@ export default function CreateBid() {
   }, []);
 
   if (!isMounted) {
-    return null;
+    return (
+      <Button
+        size="icon"
+        variant="destructive"
+        className="h-9 w-9 rounded-full"
+        disabled
+      >
+        <SquareMousePointer className="h-6 w-6" />
+      </Button>
+    );
   }
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button size="icon" variant="destructive" className="rounded-full">
-            <SquareMousePointer className="h-6 w-6 transition-all group-hover:scale-110" />
+          <Button
+            size="icon"
+            variant="destructive"
+            className="h-9 w-9 rounded-full"
+          >
+            <SquareMousePointer className="h-6 w-6" />
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -64,8 +77,12 @@ export default function CreateBid() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button size="icon" variant="destructive" className="rounded-full">
-          <SquareMousePointer className="h-6 w-6 transition-all group-hover:scale-110" />
+        <Button
+          size="icon"
+          variant="destructive"
+          className="h-9 w-9 rounded-full"
+        >
+          <SquareMousePointer className="h-6 w-6" />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
