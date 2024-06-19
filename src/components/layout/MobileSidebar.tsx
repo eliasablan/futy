@@ -1,12 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Home,
-  LineChart,
-  Package,
+  Calendar,
+  Trophy,
   PanelLeft,
-  ShoppingCart,
-  Users2,
+  ShieldHalf,
+  LayoutDashboard,
 } from "lucide-react";
 import {
   Sheet,
@@ -22,22 +21,22 @@ const items = [
   {
     href: "/dashboard",
     label: "Dashboard",
-    icon: () => <Home className="h-5 w-5" />,
+    icon: () => <LayoutDashboard className="h-5 w-5" />,
   },
   {
     href: "/dashboard/matches",
     label: "Matches",
-    icon: () => <LineChart className="h-5 w-5" />,
-  },
-  {
-    href: "/dashboard/teams",
-    label: "Teams",
-    icon: () => <Users2 className="h-5 w-5" />,
+    icon: () => <Calendar className="h-5 w-5" />,
   },
   {
     href: "/dashboard/competitions",
     label: "Competitions",
-    icon: () => <Package className="h-5 w-5" />,
+    icon: () => <Trophy className="h-5 w-5" />,
+  },
+  {
+    href: "/dashboard/teams",
+    label: "Teams",
+    icon: () => <ShieldHalf className="h-5 w-5" />,
   },
 ];
 

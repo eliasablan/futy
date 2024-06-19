@@ -169,7 +169,11 @@ export default function MatchesCard({
             </PopoverContent>
           </Popover>
           {/* Status filter */}
-          <Select onValueChange={setStatusFilter} defaultValue="ALL">
+          <Select
+            onValueChange={setStatusFilter}
+            defaultValue="ALL"
+            disabled={isLoading}
+          >
             <SelectTrigger className="w-40">
               <ShapesIcon className="h-4 w-4" />
               <SelectValue placeholder="Filter by status" />
@@ -336,7 +340,7 @@ export default function MatchesCard({
                   >
                     <div className="flex flex-col py-2">
                       <p className="text-lg">{match.competition.name}</p>
-                      <p className="text-warning pb-1 text-lg capitalize">
+                      <p className="pb-1 text-lg capitalize text-warning">
                         {match.stage.replace("_", " ").toLowerCase()}
                       </p>
                       <p className="font-mono font-medium">
