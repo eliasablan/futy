@@ -70,9 +70,9 @@ export const followTeam = async ({
   user,
   action,
 }: {
-  team?: string;
-  user?: string;
-  action: boolean;
+  team: string;
+  user: string;
+  action?: boolean;
 }) => {
   assert(team, "teamId is required");
   assert(user, "userId is required");
@@ -96,7 +96,6 @@ export const followTeam = async ({
     userId: user,
     active: action,
   });
-  console.log({ res });
 
   return res;
 };

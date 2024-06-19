@@ -1,55 +1,73 @@
 "use client";
 
-import React from "react";
-import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "./ui/button";
 import { followTeam } from "~/lib/actions";
+import { LoaderIcon } from "lucide-react";
 
 export default function FollowButton({
   team,
+  teamName,
+  user,
   following,
 }: {
   team: number;
-  following?: {
-    teamId: string;
+  teamName: string;
+  user: string;
+  following: {
+    teamId: number;
     userId: string;
     active: boolean;
-  };
+  }[];
 }) {
-  const { data: session } = useSession();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   const handleClick = async () => {
+    setIsLoading(true);
     await followTeam({
       team: team.toString(),
-      user: session?.user.id,
-      action: following?.active ? false : true,
+      user: user,
+      action: !following[0]?.active,
     });
-    if (following?.active) {
-      toast.success("Unfollowed team");
-    } else {
-      toast.success("Followed team");
-    }
+
+    if (following[0]?.active) toast.success(`Unfollowed ${teamName}`);
+    else toast.success(`Followed ${teamName}`);
     router.refresh();
+    setIsLoading(false);
   };
 
-  if (!session) {
-    return (
-      <Button className="rounded-t-none" variant="outline" disabled>
-        Log in to follow
-      </Button>
-    );
-  }
   return (
     <Button
       onClick={() => handleClick()}
       className="rounded-t-none"
-      variant={following?.active ? "default" : "outline"}
+      disabled={isLoading}
+      variant={
+        following.length > 0
+          ? following[0]?.active
+            ? "outline"
+            : "default"
+          : "default"
+      }
     >
-      {following?.active ? "Following" : "Follow"}
+      {isLoading ? (
+        <LoaderIcon className="h-4 w-4" />
+      ) : following.length > 0 ? (
+        following[0]?.active ? (
+          "Unfollow"
+        ) : (
+          "Follow"
+        )
+      ) : (
+        "Follow"
+      )}
     </Button>
   );
 }

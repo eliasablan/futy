@@ -39,23 +39,7 @@ export const posts = createTable(
   }),
 );
 
-export const bets = createTable("bet", {
-  id: serial("id").primaryKey(),
-  user_id: varchar("user_id", { length: 255 })
-    .notNull()
-    .references(() => users.id),
-  // team_id: varchar("team_id", { length: 255 })
-  //   .notNull()
-  //   .references(() => teams.id),
-  // match_id: varchar("match_id", { length: 255 })
-  //   .notNull()
-  //   .references(() => matches.id),
-  bet_type: varchar("bet_type", { length: 255 }).notNull(),
-  amount: varchar("amount", { length: 255 }).notNull(),
-  created_at: timestamp("created_at", { withTimezone: true }).notNull(),
-  updated_at: timestamp("updated_at", { withTimezone: true }),
-});
-
+// #region users and authentication tables
 export const users = createTable("user", {
   id: text("id")
     .primaryKey()
@@ -151,54 +135,68 @@ export const authenticators = createTable(
     }),
   }),
 );
+// #endregion
 
-export const teamFollowers = createTable(
-  "teamFollowers",
-  {
-    teamId: varchar("teamCode", { length: 55 }).notNull(),
-    userId: varchar("userId", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    active: boolean("active").notNull().default(true),
-  },
-  (teamFollowers) => ({
-    teamIdIdx: index("teamFollowers_teamId_idx").on(teamFollowers.teamId),
-    userIdIdx: index("teamFollowers_userId_idx").on(teamFollowers.userId),
-  }),
-);
+// #region app tables
+export const teamFollowers = createTable("teamFollower", {
+  id: serial("id").primaryKey(),
+  teamId: integer("teamId").notNull(),
+  userId: varchar("userId", { length: 255 })
+    .references(() => users.id)
+    .notNull(),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
 
-export const competitionFollowers = createTable(
-  "competitionFollowers",
-  {
-    competitionId: varchar("competitionCode", { length: 55 }).notNull(),
-    userId: varchar("userId", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    active: boolean("active").notNull().default(true),
-  },
-  (competitionFollowers) => ({
-    competitionIdIdx: index("competitionFollowers_competitionId_idx").on(
-      competitionFollowers.competitionId,
-    ),
-    userIdIdx: index("competitionFollowers_userId_idx").on(
-      competitionFollowers.userId,
-    ),
-  }),
-);
+export const competitionFollowers = createTable("competitionFollower", {
+  id: serial("id").primaryKey(),
+  competitionId: varchar("competitionCode", { length: 55 }).notNull(),
+  userId: varchar("userId", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
 
-export const playerFollowers = createTable(
-  "playerFollowers",
-  {
-    playerId: varchar("playerCode", { length: 55 }).notNull(),
-    userId: varchar("userId", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    active: boolean("active").notNull().default(true),
-  },
-  (playerFollowers) => ({
-    playerIdIdx: index("playerFollowers_playerId_idx").on(
-      playerFollowers.playerId,
-    ),
-    userIdIdx: index("playerFollowers_userId_idx").on(playerFollowers.userId),
-  }),
-);
+export const playerFollowers = createTable("playerFollower", {
+  id: serial("id").primaryKey(),
+  playerId: varchar("playerCode", { length: 55 }).notNull(),
+  userId: varchar("userId", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const bets = createTable("bet", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  teamId: varchar("team_id", { length: 255 }).notNull(),
+  matchId: varchar("match_id", { length: 255 }).notNull(),
+  betType: varchar("bet_type", { length: 255 }).notNull(),
+  amount: varchar("amount", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+// #endregion
