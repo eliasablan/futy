@@ -6,7 +6,7 @@ import { api } from "~/trpc/server";
 import CollapsibleCard from "~/components/card/CollapsibleCard";
 
 import type { Team } from "~/lib/types/team";
-import FollowButton from "~/components/FollowButton";
+import FollowTeamButton from "~/components/FollowTeamButton";
 
 export default async function TeamCard({ team }: { team: Team }) {
   const session = await getServerAuthSession();
@@ -31,28 +31,24 @@ export default async function TeamCard({ team }: { team: Team }) {
           )}
           {team.name}
         </p>
-        <p className="pt-2">
-          {team.coach?.name && (
-            <p>
-              <b>Coach: </b>
-              {team.coach.name}
-            </p>
-          )}
-        </p>
-        <p className="pt-2">
-          {team.venue && (
-            <p>
-              <b>Stadium: </b>
-              {team.venue}
-            </p>
-          )}
-        </p>
+        {team.coach?.name && (
+          <p className="pt-2">
+            <b>Coach: </b>
+            {team.coach.name}
+          </p>
+        )}
+        {team.venue && (
+          <p className="pt-2">
+            <b>Stadium: </b>
+            {team.venue}
+          </p>
+        )}
         <p className="pt-2">
           <b>Foundation: </b>
           {team.founded}
         </p>
         {following && (
-          <FollowButton
+          <FollowTeamButton
             className="my-4"
             team={team.id}
             teamName={team.name}

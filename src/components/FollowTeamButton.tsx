@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { followTeam } from "~/lib/actions";
 
-export default function FollowButton({
+export default function FollowTeamButton({
   team,
   teamName,
   user,

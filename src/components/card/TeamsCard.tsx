@@ -1,8 +1,14 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { getServerAuthSession } from "~/server/auth";
+import type { URLSearchParams } from "url";
 
+import { fetchTeams } from "~/lib/data";
+
+import { api } from "~/trpc/server";
 import { cn } from "~/lib/utils";
+
 import { Button } from "~/components/ui/button";
 import {
   Pagination,
@@ -13,14 +19,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
-
-import { fetchTeams } from "~/lib/data";
-
-import type { URLSearchParams } from "url";
 import CollapsibleCard from "~/components/card/CollapsibleCard";
-import FollowButton from "../FollowButton";
-import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
+import FollowTeamButton from "~/components/FollowTeamButton";
 
 export default async function TeamsCard({
   searchParams,
@@ -74,7 +74,7 @@ export default async function TeamsCard({
                   </Link>
                 </Button>
                 {following && (
-                  <FollowButton
+                  <FollowTeamButton
                     className="rounded-t-none"
                     team={team.id}
                     teamName={team.name}
