@@ -75,6 +75,7 @@ export default async function TeamsCard({
                 </Button>
                 {following && (
                   <FollowButton
+                    className="rounded-t-none"
                     team={team.id}
                     teamName={team.name}
                     user={session?.user.id ?? ""}

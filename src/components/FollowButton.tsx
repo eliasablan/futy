@@ -1,22 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "./ui/button";
 import { followTeam } from "~/lib/actions";
-import { LoaderIcon } from "lucide-react";
 
 export default function FollowButton({
   team,
   teamName,
   user,
+  className,
   following,
 }: {
   team: number;
   teamName: string;
   user: string;
+  className?: string;
   following: {
     teamId: number;
     userId: string;
@@ -24,14 +25,8 @@ export default function FollowButton({
   }[];
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
 
   const handleClick = async () => {
-    setIsLoading(true);
     await followTeam({
       team: team.toString(),
       user: user,
@@ -41,14 +36,12 @@ export default function FollowButton({
     if (following[0]?.active) toast.success(`Unfollowed ${teamName}`);
     else toast.success(`Followed ${teamName}`);
     router.refresh();
-    setIsLoading(false);
   };
 
   return (
     <Button
       onClick={() => handleClick()}
-      className="rounded-t-none"
-      disabled={isLoading}
+      className={className}
       variant={
         following.length > 0
           ? following[0]?.active
@@ -57,17 +50,11 @@ export default function FollowButton({
           : "default"
       }
     >
-      {isLoading ? (
-        <LoaderIcon className="h-4 w-4" />
-      ) : following.length > 0 ? (
-        following[0]?.active ? (
-          "Unfollow"
-        ) : (
-          "Follow"
-        )
-      ) : (
-        "Follow"
-      )}
+      {following.length > 0
+        ? following[0]?.active
+          ? "Unfollow"
+          : "Follow"
+        : "Follow"}
     </Button>
   );
 }

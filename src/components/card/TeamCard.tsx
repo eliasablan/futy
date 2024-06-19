@@ -1,11 +1,21 @@
 import React from "react";
 import Image from "next/image";
+import { getServerAuthSession } from "~/server/auth";
+import { api } from "~/trpc/server";
 
 import CollapsibleCard from "~/components/card/CollapsibleCard";
 
 import type { Team } from "~/lib/types/team";
+import FollowButton from "~/components/FollowButton";
 
 export default async function TeamCard({ team }: { team: Team }) {
+  const session = await getServerAuthSession();
+  const following = session?.user.id
+    ? await api.teamFollower.isFollowed({
+        teamId: team.id,
+        userId: session.user.id,
+      })
+    : null;
   return (
     <CollapsibleCard title="Team">
       <div className="flex flex-col items-center text-center">
@@ -41,12 +51,15 @@ export default async function TeamCard({ team }: { team: Team }) {
           <b>Foundation: </b>
           {team.founded}
         </p>
-        {/* <FollowButton
-          type="teams"
-          id={team.id.toString()}
-          name={team.name}
-          emblem={team.crest}
-        /> */}
+        {following && (
+          <FollowButton
+            className="my-4"
+            team={team.id}
+            teamName={team.name}
+            user={session?.user.id ?? ""}
+            following={following}
+          />
+        )}
       </div>
     </CollapsibleCard>
   );
