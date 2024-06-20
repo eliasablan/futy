@@ -18,6 +18,9 @@ export type FetchTeam = Team & {
 };
 
 export interface Team {
+  ok: boolean;
+  message?: string;
+  errorCode?: number;
   area: Area;
   id: number;
   name: string;

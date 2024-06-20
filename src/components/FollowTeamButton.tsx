@@ -31,6 +31,7 @@ export default function FollowTeamButton({
     const response = await handleTeamFollow({
       followingId,
       team,
+      teamName,
       user,
       action: !isFollowing,
     });

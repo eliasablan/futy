@@ -141,6 +141,7 @@ export const authenticators = createTable(
 export const teamsFollows = createTable("teamFollow", {
   id: serial("id").primaryKey(),
   teamId: integer("teamId").notNull(),
+  teamName: varchar("teamName", { length: 55 }).notNull(),
   userId: varchar("userId", { length: 255 })
     .references(() => users.id)
     .notNull(),
@@ -156,14 +157,15 @@ export const teamsFollows = createTable("teamFollow", {
 export const competitionsFollows = createTable("competitionFollow", {
   id: serial("id").primaryKey(),
   competitionCode: varchar("competitionCode", { length: 55 }).notNull(),
+  competitionName: varchar("competitionName", { length: 55 }).notNull(),
   userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => users.id),
   active: boolean("active").notNull().default(true),
-  createdAt: timestamp("createdAt", { withTimezone: true })
+  created_at: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updatedAt", { withTimezone: true })
+  updated_at: timestamp("updated_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });
@@ -171,14 +173,15 @@ export const competitionsFollows = createTable("competitionFollow", {
 export const playersFollows = createTable("playerFollow", {
   id: serial("id").primaryKey(),
   playerId: integer("playerId").notNull(),
+  playerName: varchar("playerName", { length: 55 }).notNull(),
   userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => users.id),
   active: boolean("active").notNull().default(true),
-  createdAt: timestamp("createdAt", { withTimezone: true })
+  created_at: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updatedAt", { withTimezone: true })
+  updated_at: timestamp("updated_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });
@@ -192,10 +195,10 @@ export const bets = createTable("bet", {
   matchId: varchar("matchId", { length: 255 }).notNull(),
   betType: varchar("betType", { length: 255 }).notNull(),
   amount: varchar("amount", { length: 255 }).notNull(),
-  createdAt: timestamp("createdAt", { withTimezone: true })
+  created_at: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updatedAt", { withTimezone: true })
+  updated_at: timestamp("updated_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });

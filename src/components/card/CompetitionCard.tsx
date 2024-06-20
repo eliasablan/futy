@@ -15,43 +15,52 @@ export default async function CompetitionCard({
 }) {
   const session = await getServerAuthSession();
   const follow =
+    competition.code &&
     session &&
     (await api.competitionFollow.previouslyFollowed({
       competitionCode: competition.code,
       userId: session.user.id,
     }));
 
+  console.log({ follow });
+
   return (
     <CollapsibleCard title="Competition">
-      <div className="flex flex-col items-center">
-        <Image
-          src={competition.emblem}
-          alt={competition.name}
-          width={200}
-          height={200}
-        />
-        <p className="inline-flex gap-3 pt-4 font-semibold">
-          {competition.area?.flag && (
-            <Image
-              src={competition.area.flag}
-              alt={competition.area.name}
-              width={20}
-              height={20}
+      {!competition.ok ? (
+        <div className="flex flex-col items-center text-center">
+          <p className="text-destructive">{competition.message}</p>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center">
+          <Image
+            src={competition.emblem}
+            alt={competition.name}
+            width={200}
+            height={200}
+          />
+          <p className="inline-flex gap-3 pt-4 font-semibold">
+            {competition.area?.flag && (
+              <Image
+                src={competition.area.flag}
+                alt={competition.area.name}
+                width={20}
+                height={20}
+              />
+            )}
+            {competition.name}
+          </p>
+          {session && (
+            <FollowCompetitionButton
+              followId={follow ? follow.id : undefined}
+              following={follow ? follow.active : undefined}
+              competition={competition.code}
+              user={session.user.id}
+              competitionName={competition.name}
+              className="my-4"
             />
           )}
-          {competition.name}
-        </p>
-        {session && (
-          <FollowCompetitionButton
-            followId={follow?.id}
-            following={follow?.active}
-            competition={competition.code}
-            user={session.user.id}
-            competitionName={competition.name}
-            className="my-4"
-          />
-        )}
-      </div>
+        </div>
+      )}
     </CollapsibleCard>
   );
 }

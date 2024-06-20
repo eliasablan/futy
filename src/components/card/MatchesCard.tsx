@@ -58,7 +58,9 @@ export default function MatchesCard({
     from: obtenerPrimerDiaSemana(new Date()),
     to: obtenerUltimoDiaSemana(new Date()),
   });
-  const [fetchError, setFetchError] = useState<string | undefined>("");
+  const [error, setError] = useState<
+    { message: string; code: string } | undefined
+  >();
   const statusOptions = [
     { label: "All games", value: "ALL" },
     { label: "Finished", value: "FINISHED" },
@@ -71,15 +73,14 @@ export default function MatchesCard({
 
   // #region Fetch matches logic
   const fetchSyncMatches = async (): Promise<void> => {
-    setFetchError("");
+    setError(undefined);
     const res = await fetchMatches({
       code,
       team,
       date: dateRange,
     });
     if (!res.ok) {
-      setFetchError(res.message);
-      setIsLoading(false);
+      setError({ message: res.message!, code: res.errorCode! });
     } else {
       setAllMatches(res.matches ?? []);
       if (statusFilter === "ALL") {
@@ -120,14 +121,8 @@ export default function MatchesCard({
     void fetchSyncMatches();
   };
   // #endregion
-
   return (
     <CollapsibleCard title="Matches" className={className}>
-      {fetchError && (
-        <div className="col-span-full mb-3 text-center text-destructive">
-          {fetchError}
-        </div>
-      )}
       <div>
         <div className="mb-3 flex items-center justify-between gap-x-3">
           {/* Date range filter */}
@@ -194,7 +189,20 @@ export default function MatchesCard({
           <div className="flex h-96 items-center justify-center">
             <LoaderCircle className="h-12 w-12 animate-spin" />
           </div>
-        ) : matches?.length > 0 ? (
+        ) : error ? (
+          <div className="flex flex-col items-center text-center">
+            <p className="text-destructive">{error.message}</p>
+            <div className="flex h-72 items-center justify-center">
+              <Button
+                variant="link"
+                size="icon"
+                onClick={() => reloadMatches()}
+              >
+                <RotateCw className="h-12 w-12" />
+              </Button>
+            </div>
+          </div>
+        ) : matches.length > 0 ? (
           <Accordion type="single" collapsible className="border-t">
             {matches.map((match: Match) => (
               <AccordionItem
@@ -402,14 +410,8 @@ export default function MatchesCard({
               </AccordionItem>
             ))}
           </Accordion>
-        ) : fetchError ? (
-          <div className="flex h-72 items-center justify-center">
-            <Button variant="link" size="icon" onClick={() => reloadMatches()}>
-              <RotateCw className="h-12 w-12" />
-            </Button>
-          </div>
         ) : (
-          <div className="flex h-72 items-center justify-center">
+          <div className="flex h-72 items-center justify-center text-destructive">
             No games matching your filters
           </div>
         )}

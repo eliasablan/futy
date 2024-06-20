@@ -31,6 +31,7 @@ export default function FollowCompetitionButton({
     const response = await handleCompetitionFollow({
       followingId,
       competition,
+      competitionName,
       user,
       action: !isFollowing,
     });

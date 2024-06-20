@@ -31,6 +31,7 @@ export default function FollowPlayerButton({
     const response = await handlePlayerFollow({
       followingId,
       player,
+      playerName,
       user,
       action: !isFollowing,
     });

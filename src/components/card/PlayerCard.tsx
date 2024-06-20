@@ -42,8 +42,8 @@ export default async function PlayerCard({
         </p>
         {session && (
           <FollowPlayerButton
-            followId={follow ? follow[0]?.id : undefined}
-            following={follow ? follow[0]?.active : undefined}
+            followId={follow?.id}
+            following={follow?.active}
             player={player.id}
             playerName={player.name}
             user={session.user.id}

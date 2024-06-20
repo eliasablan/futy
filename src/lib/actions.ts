@@ -40,7 +40,7 @@ export const fetchMatches = async ({
       "X-Auth-Token": auth_token,
     },
     next: {
-      revalidate: 60,
+      revalidate: 12, // 5 per minute
     },
   });
 
@@ -57,11 +57,13 @@ export const fetchMatches = async ({
 export const handleTeamFollow = async ({
   followingId,
   team,
+  teamName,
   user,
   action,
 }: {
   followingId?: number;
   team: number;
+  teamName: string;
   user: string;
   action: boolean;
 }) => {
@@ -84,6 +86,7 @@ export const handleTeamFollow = async ({
     .insert(teamsFollows)
     .values({
       teamId: team,
+      teamName,
       userId: user,
       active: action,
     })
@@ -99,11 +102,13 @@ export const handleTeamFollow = async ({
 export const handleCompetitionFollow = async ({
   followingId,
   competition,
+  competitionName,
   user,
   action,
 }: {
   followingId?: number;
   competition: string;
+  competitionName: string;
   user: string;
   action: boolean;
 }) => {
@@ -126,6 +131,7 @@ export const handleCompetitionFollow = async ({
     .insert(competitionsFollows)
     .values({
       competitionCode: competition,
+      competitionName,
       userId: user,
       active: action,
     })
@@ -141,11 +147,13 @@ export const handleCompetitionFollow = async ({
 export const handlePlayerFollow = async ({
   followingId,
   player,
+  playerName,
   user,
   action,
 }: {
   followingId?: number;
   player: number;
+  playerName: string;
   user: string;
   action: boolean;
 }) => {
@@ -153,7 +161,6 @@ export const handlePlayerFollow = async ({
   assert(user, '"user" is required');
 
   if (followingId) {
-    console.log("flag");
     const response = await db
       .update(playersFollows)
       .set({ active: action })
@@ -166,6 +173,7 @@ export const handlePlayerFollow = async ({
     .insert(playersFollows)
     .values({
       playerId: player,
+      playerName,
       userId: user,
       active: action,
     })
