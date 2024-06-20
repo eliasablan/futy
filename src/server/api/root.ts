@@ -1,6 +1,7 @@
 import { postRouter } from "~/server/api/routers/post";
 import { teamFollowRouter } from "~/server/api/routers/teamFollow";
 import { competitionFollowRouter } from "~/server/api/routers/competitionFollow";
+import { playerFollowRouter } from "~/server/api/routers/playerFollow";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   post: postRouter,
   teamFollow: teamFollowRouter,
   competitionFollow: competitionFollowRouter,
+  playerFollow: playerFollowRouter,
 });
 
 // export type definition of API
