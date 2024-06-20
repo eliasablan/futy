@@ -11,6 +11,7 @@ import {
 import { eq } from "drizzle-orm";
 import assert from "assert";
 import { db } from "~/server/db";
+import { revalidatePath } from "next/cache";
 
 // #region Matches
 export const fetchMatches = async ({
@@ -79,6 +80,7 @@ export const handleTeamFollow = async ({
         id: teamsFollows.id,
         active: teamsFollows.active,
       });
+    revalidatePath("/dashboard/teams");
     return response;
   }
 
@@ -94,6 +96,7 @@ export const handleTeamFollow = async ({
       id: teamsFollows.id,
       active: teamsFollows.active,
     });
+  revalidatePath("/dashboard/teams");
   return response;
 };
 // #endregion
@@ -124,6 +127,7 @@ export const handleCompetitionFollow = async ({
         id: competitionsFollows.id,
         active: competitionsFollows.active,
       });
+    revalidatePath("/dashboard/competitions");
     return response;
   }
 
@@ -139,6 +143,8 @@ export const handleCompetitionFollow = async ({
       id: competitionsFollows.id,
       active: competitionsFollows.active,
     });
+  revalidatePath("/dashboard/competitions");
+
   return response;
 };
 // #endregion

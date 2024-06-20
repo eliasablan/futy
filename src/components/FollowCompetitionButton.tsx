@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "./ui/button";
 import { handleCompetitionFollow } from "~/lib/actions";
+import { revalidatePath } from "next/cache";
 
 export default function FollowCompetitionButton({
   followId,
