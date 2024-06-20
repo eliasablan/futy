@@ -69,14 +69,24 @@ export const handleTeamFollow = async ({
     const response = await db
       .update(teamsFollows)
       .set({ active: action })
-      .where(eq(teamsFollows.id, followingId));
+      .where(eq(teamsFollows.id, followingId))
+      .returning({
+        id: teamsFollows.id,
+        active: teamsFollows.active,
+      });
     return response;
   }
 
-  const response = await db.insert(teamsFollows).values({
+  const response = await db
+    .insert(teamsFollows)
+    .values({
     teamId: team,
     userId: user,
     active: action,
+    })
+    .returning({
+      id: teamsFollows.id,
+      active: teamsFollows.active,
   });
   return response;
 };

@@ -75,7 +75,7 @@ export default async function TeamsCard({
                 </Button>
                 {session && (
                   <FollowTeamButton
-                    followingId={follow ? follow[0]?.id : undefined}
+                    followId={follow ? follow[0]?.id : undefined}
                     following={follow ? follow[0]?.active : undefined}
                     team={team.id}
                     teamName={team.name}

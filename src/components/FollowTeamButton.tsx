@@ -8,14 +8,14 @@ import { Button } from "./ui/button";
 import { handleTeamFollow } from "~/lib/actions";
 
 export default function FollowTeamButton({
-  followingId,
+  followId,
   following,
   team,
   teamName,
   user,
   className,
 }: {
-  followingId?: number;
+  followId?: number;
   following?: boolean;
   team: number;
   teamName: string;
@@ -24,21 +24,23 @@ export default function FollowTeamButton({
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(!!following);
+  const [followingId, setFollowingId] = useState<number>(followId ?? 0);
 
   const handleClick = async () => {
     setIsLoading(true);
-    await handleTeamFollow({
+    const response = await handleTeamFollow({
       followingId,
       team,
       user,
       action: !isFollowing,
     });
 
-    if (isFollowing) {
+    if (response[0]?.active) {
       toast.success(`Unfollowed ${teamName}`);
     } else {
       toast.success(`Followed ${teamName}`);
     }
+    if (response[0]?.id) setFollowingId(response[0].id);
     setIsLoading(false);
     setIsFollowing(!isFollowing);
   };
