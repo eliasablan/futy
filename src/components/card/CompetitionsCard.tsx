@@ -61,7 +61,7 @@ export default async function CompetitionsCard({
                 </Button>
                 {session && (
                   <FollowCompetitionButton
-                    followingId={follow ? follow[0]?.id : undefined}
+                    followId={follow ? follow[0]?.id : undefined}
                     following={follow ? follow[0]?.active : undefined}
                     competition={competition.code}
                     competitionName={competition.name}

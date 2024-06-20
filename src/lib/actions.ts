@@ -111,14 +111,24 @@ export const handleCompetitionFollow = async ({
     const response = await db
       .update(competitionsFollows)
       .set({ active: action })
-      .where(eq(competitionsFollows.id, followingId));
+      .where(eq(competitionsFollows.id, followingId))
+      .returning({
+        id: competitionsFollows.id,
+        active: competitionsFollows.active,
+      });
     return response;
   }
 
-  const response = await db.insert(competitionsFollows).values({
+  const response = await db
+    .insert(competitionsFollows)
+    .values({
     competitionCode: competition,
     userId: user,
     active: action,
+    })
+    .returning({
+      id: competitionsFollows.id,
+      active: competitionsFollows.active,
   });
   return response;
 };
