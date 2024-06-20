@@ -36,9 +36,9 @@ export default function FollowPlayerButton({
     });
 
     if (response[0]?.active) {
-      toast.success(`Unfollowed ${playerName}`);
-    } else {
       toast.success(`Followed ${playerName}`);
+    } else {
+      toast.success(`Unfollowed ${playerName}`);
     }
     if (response[0]?.id) setFollowingId(response[0].id);
     setIsLoading(false);

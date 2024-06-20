@@ -36,9 +36,9 @@ export default function FollowCompetitionButton({
     });
 
     if (response[0]?.active) {
-      toast.success(`Unfollowed ${competitionName}`);
-    } else {
       toast.success(`Followed ${competitionName}`);
+    } else {
+      toast.success(`Unfollowed ${competitionName}`);
     }
     if (response[0]?.id) setFollowingId(response[0].id);
     setIsLoading(false);

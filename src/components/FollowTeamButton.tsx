@@ -36,9 +36,9 @@ export default function FollowTeamButton({
     });
 
     if (response[0]?.active) {
-      toast.success(`Unfollowed ${teamName}`);
-    } else {
       toast.success(`Followed ${teamName}`);
+    } else {
+      toast.success(`Unfollowed ${teamName}`);
     }
     if (response[0]?.id) setFollowingId(response[0].id);
     setIsLoading(false);
