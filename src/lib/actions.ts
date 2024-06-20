@@ -4,7 +4,7 @@ import type { DateRange } from "react-day-picker";
 
 import type { FetchMatches } from "~/lib/types/match";
 import {
-  teamsFollows,
+  // teamsFollows,
   competitionsFollows,
   playersFollows,
 } from "~/server/db/schema";
@@ -55,50 +55,50 @@ export const fetchMatches = async ({
 // #endregion
 
 // #region Teams
-export const handleTeamFollow = async ({
-  followingId,
-  team,
-  teamName,
-  user,
-  action,
-}: {
-  followingId?: number;
-  team: number;
-  teamName: string;
-  user: string;
-  action: boolean;
-}) => {
-  assert(team, '"team" is required');
-  assert(user, '"user" is required');
+// export const handleTeamFollow = async ({
+//   followingId,
+//   team,
+//   teamName,
+//   user,
+//   action,
+// }: {
+//   followingId?: number;
+//   team: number;
+//   teamName: string;
+//   user: string;
+//   action: boolean;
+// }) => {
+//   assert(team, '"team" is required');
+//   assert(user, '"user" is required');
 
-  if (followingId) {
-    const response = await db
-      .update(teamsFollows)
-      .set({ active: action })
-      .where(eq(teamsFollows.id, followingId))
-      .returning({
-        id: teamsFollows.id,
-        active: teamsFollows.active,
-      });
-    revalidatePath("/dashboard/teams");
-    return response;
-  }
+//   if (followingId) {
+//     const response = await db
+//       .update(teamsFollows)
+//       .set({ active: action })
+//       .where(eq(teamsFollows.id, followingId))
+//       .returning({
+//         id: teamsFollows.id,
+//         active: teamsFollows.active,
+//       });
+//     revalidatePath("/dashboard/teams");
+//     return response;
+//   }
 
-  const response = await db
-    .insert(teamsFollows)
-    .values({
-      teamId: team,
-      teamName,
-      userId: user,
-      active: action,
-    })
-    .returning({
-      id: teamsFollows.id,
-      active: teamsFollows.active,
-    });
-  revalidatePath("/dashboard/teams");
-  return response;
-};
+//   const response = await db
+//     .insert(teamsFollows)
+//     .values({
+//       teamId: team,
+//       teamName,
+//       userId: user,
+//       active: action,
+//     })
+//     .returning({
+//       id: teamsFollows.id,
+//       active: teamsFollows.active,
+//     });
+//   revalidatePath("/dashboard/teams");
+//   return response;
+// };
 // #endregion
 
 // #region Competitions

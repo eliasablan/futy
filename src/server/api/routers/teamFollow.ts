@@ -15,6 +15,7 @@ export const teamFollowRouter = createTRPCRouter({
         ),
       });
     }),
+
   findByUser: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(({ ctx, input }) => {
@@ -25,5 +26,44 @@ export const teamFollowRouter = createTRPCRouter({
         ),
         orderBy: [teamsFollows.teamName],
       });
+    }),
+
+  follow: protectedProcedure
+    .input(
+      z.object({
+        followingId: z.number(),
+        team: z.number(),
+        teamName: z.string(),
+        user: z.string(),
+        action: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (input.followingId) {
+        const response = await ctx.db
+          .update(teamsFollows)
+          .set({
+            active: input.action,
+          })
+          .where(eq(teamsFollows.id, input.followingId))
+          .returning({
+            id: teamsFollows.id,
+            active: teamsFollows.active,
+          });
+        return response;
+      }
+      const response = await ctx.db
+        .insert(teamsFollows)
+        .values({
+          teamId: input.team,
+          teamName: input.teamName,
+          userId: ctx.session.user.id,
+          active: input.action,
+        })
+        .returning({
+          id: teamsFollows.id,
+          active: teamsFollows.active,
+        });
+      return response;
     }),
 });
