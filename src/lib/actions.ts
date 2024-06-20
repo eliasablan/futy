@@ -3,10 +3,11 @@ import { formatearDateRange } from "~/lib/utils";
 import type { DateRange } from "react-day-picker";
 
 import type { FetchMatches } from "~/lib/types/match";
-import { db } from "~/server/db";
-import { teamFollowers } from "~/server/db/schema";
-import { eq } from "drizzle-orm";
+import { teamsFollows, competitionsFollows } from "~/server/db/schema";
+import { eq, and } from "drizzle-orm";
 import assert from "assert";
+import { db } from "~/server/db";
+import { api } from "~/trpc/server";
 
 // #region Matches
 export const fetchMatches = async ({
@@ -50,52 +51,96 @@ export const fetchMatches = async ({
 // #endregion
 
 // #region Teams
-export const isFollowing = async ({
-  team,
-  user,
-}: {
-  team?: string;
-  user?: string;
-}) => {
-  assert(team, "teamId is required");
-  assert(user, "userId is required");
-  const req = await db.query.teamFollowers.findFirst({
-    where: eq(teamFollowers.userId, user) && eq(teamFollowers.teamId, team),
-  });
-  return req?.active;
-};
-
-export const followTeam = async ({
+export const handleTeamFollow = async ({
+  followingId,
   team,
   user,
   action,
 }: {
-  team: string;
+  followingId?: number;
+  team: number;
+  user: string;
+  action: boolean;
+}) => {
+  assert(team, '"team" is required');
+  assert(user, '"user" is required');
+
+  if (followingId) {
+    const response = await db
+      .update(teamsFollows)
+      .set({ active: action })
+      .where(eq(teamsFollows.id, followingId));
+    return response;
+  }
+
+  const response = await db.insert(teamsFollows).values({
+    teamId: team,
+    userId: user,
+    active: action,
+  });
+  return response;
+};
+// #endregion
+
+// #region Competitions
+export const handleCompetitionFollow = async ({
+  followingId,
+  competition,
+  user,
+  action,
+}: {
+  followingId?: number;
+  competition: string;
+  user: string;
+  action: boolean;
+}) => {
+  assert(competition, '"team" is required');
+  assert(user, '"user" is required');
+
+  if (followingId) {
+    const response = await db
+      .update(competitionsFollows)
+      .set({ active: action })
+      .where(eq(competitionsFollows.id, followingId));
+    return response;
+  }
+
+  const response = await db.insert(competitionsFollows).values({
+    competitionCode: competition,
+    userId: user,
+    active: action,
+  });
+  return response;
+};
+export const followCompetition = async ({
+  competition,
+  user,
+  action,
+}: {
+  competition: string;
   user: string;
   action?: boolean;
 }) => {
-  assert(team, "teamId is required");
-  assert(user, "userId is required");
+  assert(competition, "competition is required");
 
-  const existingFollower = await db.query.teamFollowers.findFirst({
-    where: eq(teamFollowers.userId, user) && eq(teamFollowers.teamId, team),
+  const existingFollower = await db.query.competitionsFollows.findFirst({
+    where: eq(competitionsFollows.competitionCode, competition),
   });
 
   // Modify record if already interacted with the team before
   if (existingFollower) {
     const res = await db
-      .update(teamFollowers)
+      .update(competitionsFollows)
       .set({ active: action })
-      .where(eq(teamFollowers.userId, user) && eq(teamFollowers.teamId, team));
-    console.log({ res });
+      .where(eq(competitionsFollows.id, existingFollower.id));
     return res;
   }
   // Create record if never interacted with the team before
-  const res = await db.insert(teamFollowers).values({
-    teamId: team,
+  const res = await db.insert(competitionsFollows).values({
+    competitionCode: competition,
     userId: user,
     active: action,
   });
-
   return res;
 };
+// #endregion

@@ -138,14 +138,14 @@ export const authenticators = createTable(
 // #endregion
 
 // #region app tables
-export const teamFollowers = createTable("teamFollower", {
+export const teamsFollows = createTable("teamFollow", {
   id: serial("id").primaryKey(),
   teamId: integer("teamId").notNull(),
   userId: varchar("userId", { length: 255 })
     .references(() => users.id)
     .notNull(),
   active: boolean("active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
+  createdAt: timestamp("createdAt", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: timestamp("updatedAt", { withTimezone: true })
@@ -153,14 +153,14 @@ export const teamFollowers = createTable("teamFollower", {
     .notNull(),
 });
 
-export const competitionFollowers = createTable("competitionFollower", {
+export const competitionsFollows = createTable("competitionFollow", {
   id: serial("id").primaryKey(),
-  competitionId: varchar("competitionCode", { length: 55 }).notNull(),
+  competitionCode: varchar("competitionCode", { length: 55 }).notNull(),
   userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => users.id),
   active: boolean("active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
+  createdAt: timestamp("createdAt", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: timestamp("updatedAt", { withTimezone: true })
@@ -168,14 +168,14 @@ export const competitionFollowers = createTable("competitionFollower", {
     .notNull(),
 });
 
-export const playerFollowers = createTable("playerFollower", {
+export const playersFollows = createTable("playerFollow", {
   id: serial("id").primaryKey(),
-  playerId: varchar("playerCode", { length: 55 }).notNull(),
+  playerId: integer("playerId").notNull(),
   userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => users.id),
   active: boolean("active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
+  createdAt: timestamp("createdAt", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: timestamp("updatedAt", { withTimezone: true })
@@ -185,17 +185,17 @@ export const playerFollowers = createTable("playerFollower", {
 
 export const bets = createTable("bet", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id", { length: 255 })
+  userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => users.id),
-  teamId: varchar("team_id", { length: 255 }).notNull(),
-  matchId: varchar("match_id", { length: 255 }).notNull(),
-  betType: varchar("bet_type", { length: 255 }).notNull(),
+  teamId: varchar("teamId", { length: 255 }).notNull(),
+  matchId: varchar("matchId", { length: 255 }).notNull(),
+  betType: varchar("betType", { length: 255 }).notNull(),
   amount: varchar("amount", { length: 255 }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
+  createdAt: timestamp("createdAt", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
+  updatedAt: timestamp("updatedAt", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });

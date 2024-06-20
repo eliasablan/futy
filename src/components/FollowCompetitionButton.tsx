@@ -5,20 +5,20 @@ import { Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "./ui/button";
-import { handleTeamFollow } from "~/lib/actions";
+import { handleCompetitionFollow } from "~/lib/actions";
 
-export default function FollowTeamButton({
+export default function FollowCompetitionButton({
   followingId,
   following,
-  team,
-  teamName,
+  competition,
+  competitionName,
   user,
   className,
 }: {
   followingId?: number;
   following?: boolean;
-  team: number;
-  teamName: string;
+  competition: string;
+  competitionName: string;
   user: string;
   className?: string;
 }) {
@@ -27,17 +27,17 @@ export default function FollowTeamButton({
 
   const handleClick = async () => {
     setIsLoading(true);
-    await handleTeamFollow({
+    await handleCompetitionFollow({
       followingId,
-      team,
+      competition,
       user,
       action: !isFollowing,
     });
 
     if (isFollowing) {
-      toast.success(`Unfollowed ${teamName}`);
+      toast.success(`Unfollowed ${competitionName}`);
     } else {
-      toast.success(`Followed ${teamName}`);
+      toast.success(`Followed ${competitionName}`);
     }
     setIsLoading(false);
     setIsFollowing(!isFollowing);

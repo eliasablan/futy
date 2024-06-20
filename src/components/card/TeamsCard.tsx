@@ -39,12 +39,12 @@ export default async function TeamsCard({
       <div className="relative">
         <div className="mx-auto grid w-full grid-cols-3 gap-3">
           {teams?.map(async (team) => {
-            const following = session?.user.id
-              ? await api.teamFollower.isFollowed({
-                  teamId: team.id,
-                  userId: session.user.id,
-                })
-              : null;
+            const follow =
+              session &&
+              (await api.teamFollow.previouslyFollowed({
+                teamId: team.id,
+                userId: session.user.id,
+              }));
             return (
               <div className="flex w-full flex-col" key={team.id}>
                 <Button
@@ -73,13 +73,14 @@ export default async function TeamsCard({
                     </span>
                   </Link>
                 </Button>
-                {following && (
+                {session && (
                   <FollowTeamButton
-                    className="rounded-t-none"
+                    followingId={follow ? follow[0]?.id : undefined}
+                    following={follow ? follow[0]?.active : undefined}
                     team={team.id}
                     teamName={team.name}
-                    user={session?.user.id ?? ""}
-                    following={following}
+                    user={session.user.id}
+                    className="rounded-t-none"
                   />
                 )}
               </div>

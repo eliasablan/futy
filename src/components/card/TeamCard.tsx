@@ -3,19 +3,20 @@ import Image from "next/image";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
+import type { Team } from "~/lib/types/team";
 import CollapsibleCard from "~/components/card/CollapsibleCard";
 
-import type { Team } from "~/lib/types/team";
 import FollowTeamButton from "~/components/FollowTeamButton";
 
 export default async function TeamCard({ team }: { team: Team }) {
   const session = await getServerAuthSession();
-  const following = session?.user.id
-    ? await api.teamFollower.isFollowed({
-        teamId: team.id,
-        userId: session.user.id,
-      })
-    : null;
+  const follow =
+    session &&
+    (await api.teamFollow.previouslyFollowed({
+      teamId: team.id,
+      userId: session.user.id,
+    }));
+
   return (
     <CollapsibleCard title="Team">
       <div className="flex flex-col items-center text-center">
@@ -47,13 +48,14 @@ export default async function TeamCard({ team }: { team: Team }) {
           <b>Foundation: </b>
           {team.founded}
         </p>
-        {following && (
+        {session && (
           <FollowTeamButton
-            className="my-4"
+            followingId={follow ? follow[0]?.id : undefined}
+            following={follow ? follow[0]?.active : undefined}
             team={team.id}
+            user={session.user.id}
             teamName={team.name}
-            user={session?.user.id ?? ""}
-            following={following}
+            className="my-4"
           />
         )}
       </div>
