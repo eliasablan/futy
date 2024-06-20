@@ -50,8 +50,8 @@ export default async function TeamCard({ team }: { team: Team }) {
         </p>
         {session && (
           <FollowTeamButton
-            followId={follow ? follow[0]?.id : undefined}
-            following={follow ? follow[0]?.active : undefined}
+            followId={follow?.id}
+            following={follow?.active}
             team={team.id}
             user={session.user.id}
             teamName={team.name}
