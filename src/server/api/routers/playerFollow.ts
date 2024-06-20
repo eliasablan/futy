@@ -15,4 +15,15 @@ export const playerFollowRouter = createTRPCRouter({
         ),
       });
     }),
+  findByUser: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.playersFollows.findMany({
+        where: and(
+          eq(playersFollows.userId, input.userId),
+          eq(playersFollows.active, true),
+        ),
+        orderBy: [playersFollows.playerName],
+      });
+    }),
 });
