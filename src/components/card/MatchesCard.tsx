@@ -208,13 +208,7 @@ export default function MatchesCard({
               <AccordionItem
                 key={match.id}
                 value={match.id.toString()}
-                className={cn(
-                  "hover:bg-accent hover:text-accent-foreground",
-                  match.status === "IN_PLAY" &&
-                    "bg-primary/50 text-primary-foreground",
-                  match.status === "PAUSED" &&
-                    "bg-warning-foreground/50 text-warning",
-                )}
+                className="hover:bg-accent hover:text-accent-foreground"
               >
                 <AccordionTrigger
                   className="grid grid-cols-3 py-2"
@@ -230,107 +224,71 @@ export default function MatchesCard({
                       alt="Home Team Crest"
                     />
                   </p>
-                  <div
-                    className={cn(
-                      "w-22 mx-auto rounded-md p-1",
-                      match.status === "FINISHED" &&
-                        "border-2 bg-accent text-accent-foreground",
-                      match.status === "IN_PLAY" &&
-                        "bg-warning text-warning-foreground",
-                      match.status === "PAUSED" &&
-                        "bg-success text-success-foreground",
-                      match.status === "TIMED" &&
-                        "bg-primary text-primary-foreground",
-                      match.status === "POSTPONED" &&
-                        "bg-destructive text-destructive-foreground",
-                    )}
-                  >
-                    {match.status === "FINISHED" ? (
-                      <>
-                        <p className="font-mono text-lg font-semibold leading-5">
-                          {match.score.fullTime.home}
-                          {":"}
-                          {match.score.fullTime.away}
-                        </p>
-                        <p className="text-xs">Finished</p>
-                      </>
-                    ) : match.status === "IN_PLAY" ? ( // Refactor
-                      <>
-                        <p className="font-mono text-lg font-semibold leading-5">
-                          {match.score.fullTime.home}
-                          {":"}
-                          {match.score.fullTime.away}
-                        </p>
-                        <p className="text-xs">
-                          <span>Playing</span>
-                        </p>
-                      </>
-                    ) : match.status === "PAUSED" ? ( // Refactor
-                      <>
-                        <p className="font-mono text-lg font-semibold leading-5">
-                          {match.score.fullTime.home}
-                          {":"}
-                          {match.score.fullTime.away}
-                        </p>
-                        <p className="text-xs">
-                          <span>HT</span>
-                        </p>
-                      </>
-                    ) : match.status === "TIMED" ? (
-                      <>
-                        <p className="font-mono text-lg font-semibold lowercase leading-5">
-                          {formatearFecha({
-                            fechaISO: match.utcDate,
-                            format: "HH:mm",
-                          })}
-                        </p>
-                        <p className="text-xs">
-                          {formatearFecha({
-                            fechaISO: match.utcDate,
-                            format: "dd MMM",
-                          })}
-                        </p>
-                      </>
-                    ) : match.status === "POSTPONED" ? (
-                      <>
-                        <p className="font-mono text-lg font-semibold leading-5">
-                          {formatearFecha({
-                            fechaISO: match.utcDate,
-                            format: "HH:mm",
-                          })}
-                        </p>
-                        <p className="text-xs">
-                          {formatearFecha({
-                            fechaISO: match.utcDate,
-                            format: "dd/MM/yy",
-                          })}
-                        </p>
-                      </>
-                    ) : null}
-                    {/* <p className="font-mono text-lg font-semibold leading-5">
-                        {match.status === "TIMED" &&
-                          formatearFecha({
-                            fechaISO: match.utcDate,
-                            format: "HH:mm",
-                          })}
-                        {match.status === "IN_PLAY" && "Live"}
-                        {match.status === "PAUSED" && "Pause"}
-                        {match.status === "FINISHED" && "FT"}
-                        {match.status === "POSTPONED" && "POSTPONED"}
+
+                  {/* Scoreboards */}
+                  {match.status === "FINISHED" ? (
+                    <div className="w-22 mx-auto rounded-md border-2 bg-accent p-1 text-accent-foreground">
+                      <p className="font-mono text-lg font-semibold leading-5">
+                        {match.score.fullTime.home}
+                        {":"}
+                        {match.score.fullTime.away}
+                      </p>
+                      <p className="text-xs">Finished</p>
+                    </div>
+                  ) : match.status === "IN_PLAY" ? (
+                    <div className="w-22 mx-auto rounded-md border-2 border-warning bg-warning p-1 text-warning-foreground dark:border-warning-foreground dark:bg-warning-foreground dark:text-warning">
+                      <p className="font-mono text-lg font-semibold leading-5">
+                        {match.score.fullTime.home}
+                        {":"}
+                        {match.score.fullTime.away}
                       </p>
                       <p className="text-xs">
-                        {match.status === "TIMED" &&
-                          formatearFecha({
-                            fechaISO: match.utcDate,
-                            format: "dd/MM/yy",
-                          })}
-                        {match.status !== "TIMED" &&
-                          match.status !== "POSTPONED" &&
-                          match.score.fullTime.home +
-                            "-" +
-                            match.score.fullTime.away}
-                      </p> */}
-                  </div>
+                        <span>Playing</span>
+                      </p>
+                    </div>
+                  ) : match.status === "PAUSED" ? (
+                    <div className="w-22 mx-auto rounded-md border-2 bg-success p-1 text-success-foreground">
+                      <p className="font-mono text-lg font-semibold leading-5">
+                        {match.score.fullTime.home}
+                        {":"}
+                        {match.score.fullTime.away}
+                      </p>
+                      <p className="text-xs">
+                        <span>HT</span>
+                      </p>
+                    </div>
+                  ) : match.status === "TIMED" ? (
+                    <div className="w-22 mx-auto rounded-md border-2 border-primary bg-primary p-1 text-primary-foreground dark:border-primary">
+                      <p className="font-mono text-lg font-semibold lowercase leading-5">
+                        {formatearFecha({
+                          fechaISO: match.utcDate,
+                          format: "HH:mm",
+                        })}
+                      </p>
+                      <p className="text-xs">
+                        {formatearFecha({
+                          fechaISO: match.utcDate,
+                          format: "dd MMM",
+                        })}
+                      </p>
+                    </div>
+                  ) : match.status === "POSTPONED" ? (
+                    <div className="w-22 mx-auto rounded-md border-2 bg-destructive p-1 text-destructive-foreground">
+                      <p className="font-mono text-lg font-semibold leading-5">
+                        {formatearFecha({
+                          fechaISO: match.utcDate,
+                          format: "HH:mm",
+                        })}
+                      </p>
+                      <p className="text-xs">
+                        {formatearFecha({
+                          fechaISO: match.utcDate,
+                          format: "dd/MM/yy",
+                        })}
+                      </p>
+                    </div>
+                  ) : null}
+
                   <p className="flex items-center justify-start gap-2 text-ellipsis text-sm">
                     <Image
                       src={match.awayTeam.crest}
