@@ -5,13 +5,12 @@ import type { DateRange } from "react-day-picker";
 import type { FetchMatches } from "~/lib/types/match";
 import {
   // teamsFollows,
-  competitionsFollows,
+  // competitionsFollows,
   playersFollows,
 } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import assert from "assert";
 import { db } from "~/server/db";
-import { revalidatePath } from "next/cache";
 
 // #region Matches
 export const fetchMatches = async ({
@@ -102,51 +101,51 @@ export const fetchMatches = async ({
 // #endregion
 
 // #region Competitions
-export const handleCompetitionFollow = async ({
-  followingId,
-  competition,
-  competitionName,
-  user,
-  action,
-}: {
-  followingId?: number;
-  competition: string;
-  competitionName: string;
-  user: string;
-  action: boolean;
-}) => {
-  assert(competition, '"competition" is required');
-  assert(user, '"user" is required');
+// export const handleCompetitionFollow = async ({
+//   followingId,
+//   competition,
+//   competitionName,
+//   user,
+//   action,
+// }: {
+//   followingId?: number;
+//   competition: string;
+//   competitionName: string;
+//   user: string;
+//   action: boolean;
+// }) => {
+//   assert(competition, '"competition" is required');
+//   assert(user, '"user" is required');
 
-  if (followingId) {
-    const response = await db
-      .update(competitionsFollows)
-      .set({ active: action })
-      .where(eq(competitionsFollows.id, followingId))
-      .returning({
-        id: competitionsFollows.id,
-        active: competitionsFollows.active,
-      });
-    revalidatePath("/dashboard/competitions");
-    return response;
-  }
+//   if (followingId) {
+//     const response = await db
+//       .update(competitionsFollows)
+//       .set({ active: action })
+//       .where(eq(competitionsFollows.id, followingId))
+//       .returning({
+//         id: competitionsFollows.id,
+//         active: competitionsFollows.active,
+//       });
+//     revalidatePath("/dashboard/competitions");
+//     return response;
+//   }
 
-  const response = await db
-    .insert(competitionsFollows)
-    .values({
-      competitionCode: competition,
-      competitionName,
-      userId: user,
-      active: action,
-    })
-    .returning({
-      id: competitionsFollows.id,
-      active: competitionsFollows.active,
-    });
-  revalidatePath("/dashboard/competitions");
+//   const response = await db
+//     .insert(competitionsFollows)
+//     .values({
+//       competitionCode: competition,
+//       competitionName,
+//       userId: user,
+//       active: action,
+//     })
+//     .returning({
+//       id: competitionsFollows.id,
+//       active: competitionsFollows.active,
+//     });
+//   revalidatePath("/dashboard/competitions");
 
-  return response;
-};
+//   return response;
+// };
 // #endregion
 
 // #region Players

@@ -5,8 +5,8 @@ import { Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "./ui/button";
-import { handleCompetitionFollow } from "~/lib/actions";
-import { revalidatePath } from "next/cache";
+import { useRouter } from "next/navigation";
+import { api } from "~/trpc/react";
 
 export default function FollowCompetitionButton({
   followId,
@@ -23,33 +23,38 @@ export default function FollowCompetitionButton({
   user: string;
   className?: string;
 }) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(!!following);
   const [followingId, setFollowingId] = useState<number>(followId ?? 0);
 
-  const handleClick = async () => {
-    setIsLoading(true);
-    const response = await handleCompetitionFollow({
-      followingId,
-      competition,
-      competitionName,
-      user,
-      action: !isFollowing,
-    });
-
-    if (response[0]?.active) {
-      toast.success(`Followed ${competitionName}`);
-    } else {
-      toast.success(`Unfollowed ${competitionName}`);
-    }
-    if (response[0]?.id) setFollowingId(response[0].id);
-    setIsLoading(false);
-    setIsFollowing(!isFollowing);
-  };
-
+  const handleClick = api.competitionFollow.follow.useMutation({
+    onSuccess: (data) => {
+      const follow = data[0];
+      if (follow) {
+        setFollowingId(follow.id);
+        setIsFollowing(follow.active);
+        setIsLoading(false);
+        if (follow.active) {
+          toast.success(`Followed ${competitionName}`);
+        } else {
+          toast.success(`Unfollowed ${competitionName}`);
+        }
+      }
+      router.refresh();
+    },
+  });
   return (
     <Button
-      onClick={() => handleClick()}
+      onClick={() =>
+        handleClick.mutate({
+          followingId,
+          competition,
+          competitionName,
+          user,
+          action: !isFollowing,
+        })
+      }
       className={className}
       variant={isFollowing ? "outline" : "default"}
       disabled={isLoading}
