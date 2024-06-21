@@ -5,7 +5,8 @@ import { Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "./ui/button";
-import { handlePlayerFollow } from "~/lib/actions";
+import { useRouter } from "next/navigation";
+import { api } from "~/trpc/react";
 
 export default function FollowPlayerButton({
   followId,
@@ -22,33 +23,39 @@ export default function FollowPlayerButton({
   user: string;
   className?: string;
 }) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(!!following);
   const [followingId, setFollowingId] = useState<number>(followId ?? 0);
 
-  const handleClick = async () => {
-    setIsLoading(true);
-    const response = await handlePlayerFollow({
-      followingId,
-      player,
-      playerName,
-      user,
-      action: !isFollowing,
-    });
-
-    if (response[0]?.active) {
-      toast.success(`Followed ${playerName}`);
-    } else {
-      toast.success(`Unfollowed ${playerName}`);
-    }
-    if (response[0]?.id) setFollowingId(response[0].id);
-    setIsLoading(false);
-    setIsFollowing(!isFollowing);
-  };
+  const handleClick = api.playerFollow.follow.useMutation({
+    onSuccess: (data) => {
+      const follow = data[0];
+      if (follow) {
+        setFollowingId(follow.id);
+        setIsFollowing(follow.active);
+        setIsLoading(false);
+        if (follow.active) {
+          toast.success(`Followed ${playerName}`);
+        } else {
+          toast.success(`Unfollowed ${playerName}`);
+        }
+      }
+      router.refresh();
+    },
+  });
 
   return (
     <Button
-      onClick={() => handleClick()}
+      onClick={() =>
+        handleClick.mutate({
+          followingId,
+          player,
+          playerName,
+          user,
+          action: !isFollowing,
+        })
+      }
       className={className}
       variant={isFollowing ? "outline" : "default"}
       disabled={isLoading}

@@ -18,7 +18,6 @@ export default async function TeamCard({ team }: { team: Team }) {
       userId: session.user.id,
     }));
 
-  console.log({ follow });
   return (
     <CollapsibleCard title="Team">
       {!team.ok ? (

@@ -22,8 +22,6 @@ export default async function CompetitionCard({
       userId: session.user.id,
     }));
 
-  console.log({ follow });
-
   return (
     <CollapsibleCard title="Competition">
       {!competition.ok ? (
