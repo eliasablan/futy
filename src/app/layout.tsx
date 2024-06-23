@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth";
+import { getServerAuthSession } from "~/server/auth";
 import { SessionProvider } from "~/components/session-provider";
 
 import "~/styles/globals.css";
@@ -12,7 +12,7 @@ import { Toaster } from "~/components/ui/sonner";
 export const metadata = {
   title: "Futy",
   description: "Follow leagues, teams and players in the world of football",
-  icons: [{ rel: "icon", url: "/ball.ico" }],
+  icons: [{ rel: "icon", url: "/ball.png" }],
 };
 
 export default async function RootLayout({
@@ -20,7 +20,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerAuthSession();
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
