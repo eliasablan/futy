@@ -5,16 +5,16 @@ services:
     image: postgres:latest
     ports:
       - 5433:5432
-    volumes:
-      - db:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - db:/var/lib/postgresql/data
   futy-t3-next:
-    depends_on:
-      - futy-t3-db
-    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: ghcr.io/eliasablan/futy-t3:latest
     ports:
       - 5005:3000
@@ -22,10 +22,16 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - AUTH_DRIZZLE_URL=${AUTH_DRIZZLE_URL}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - NEXT_PUBLIC_FBDO_API_KEY=${NEXT_PUBLIC_FBDO_API_KEY}
       - NEXT_PUBLIC_FBDO_URL=${NEXT_PUBLIC_FBDO_URL}
-networks: {}
+    depends_on:
+      - futy-t3-db
 volumes:
   db: null
+x-dockge:
+  urls:
+    - https://futy.eliasablan.com
+networks: {}
