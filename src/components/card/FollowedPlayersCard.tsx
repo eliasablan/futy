@@ -17,7 +17,7 @@ export default async function FollowedPlayersCard({
       <div className="flex flex-col items-center gap-2 text-center">
         {players?.map((player) => (
           <p key={player.id}>
-            <Link href={`/dashboard/players/${player.id}`}>
+            <Link href={`/dashboard/players/${player.playerId}`}>
               {player.playerName}
             </Link>
           </p>
