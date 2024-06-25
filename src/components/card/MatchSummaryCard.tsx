@@ -86,33 +86,38 @@ export default async function MatchSummaryCard({ match }: { match?: Match }) {
         <div className="m-8 flex w-full justify-around px-0 text-lg">
           <div className="flex h-64 flex-col items-center justify-between">
             <p className="text-center font-mono text-2xl font-semibold text-primary">
-              {match.homeTeam.shortName || match.homeTeam.name}
+              {match.homeTeam.shortName || match.homeTeam.name || "- TBD -"}
             </p>
-            <Link href={`/dashboard/teams/${match.homeTeam.id}`}>
-              <Image
-                src={match.homeTeam.crest}
-                height={100}
-                width={100}
-                alt={match.homeTeam.name}
-              />
-            </Link>
-            <p className="text-warning text-center font-mono text-7xl font-semibold">
+
+            {match.homeTeam.crest && (
+              <Link href={`/dashboard/teams/${match.homeTeam.id}`}>
+                <Image
+                  src={match.homeTeam.crest}
+                  height={100}
+                  width={100}
+                  alt={match.homeTeam.name}
+                />
+              </Link>
+            )}
+            <p className="text-center font-mono text-7xl font-semibold text-warning">
               {match.score.fullTime.home}
             </p>
           </div>
           <div className="flex h-64 flex-col items-center justify-between">
             <p className="text-center font-mono text-2xl font-semibold text-primary">
-              {match.awayTeam.shortName || match.awayTeam.name}
+              {match.awayTeam.shortName || match.awayTeam.name || "- TBD -"}
             </p>
-            <Link href={`/dashboard/teams/${match.awayTeam.id}`}>
-              <Image
-                src={match.awayTeam.crest}
-                height={100}
-                width={100}
-                alt={match.awayTeam.name}
-              />
-            </Link>
-            <p className="text-warning text-center font-mono text-7xl font-semibold">
+            {match.awayTeam.crest && (
+              <Link href={`/dashboard/teams/${match.awayTeam.id}`}>
+                <Image
+                  src={match.awayTeam.crest}
+                  height={100}
+                  width={100}
+                  alt={match.awayTeam.name}
+                />
+              </Link>
+            )}
+            <p className="text-center font-mono text-7xl font-semibold text-warning">
               {match.score.fullTime.away}
             </p>
           </div>

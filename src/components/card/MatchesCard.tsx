@@ -216,13 +216,17 @@ export default function MatchesCard({
                   showArrow={false}
                 >
                   <p className="flex items-center justify-end gap-2 text-ellipsis text-sm">
-                    {match.homeTeam.shortName || match.homeTeam.name}
-                    <Image
-                      src={match.homeTeam.crest}
-                      width={25}
-                      height={25}
-                      alt="Home Team Crest"
-                    />
+                    {match.homeTeam.shortName ||
+                      match.homeTeam.name ||
+                      "- TBD -"}
+                    {match.homeTeam.crest && (
+                      <Image
+                        src={match.homeTeam.crest}
+                        width={25}
+                        height={25}
+                        alt="Home Team Crest"
+                      />
+                    )}
                   </p>
 
                   {/* Scoreboards */}
@@ -290,13 +294,17 @@ export default function MatchesCard({
                   ) : null}
 
                   <p className="flex items-center justify-start gap-2 text-ellipsis text-sm">
-                    <Image
-                      src={match.awayTeam.crest}
-                      width={25}
-                      height={25}
-                      alt="Away Team Crest"
-                    />
-                    {match.awayTeam.shortName || match.awayTeam.name}
+                    {match.awayTeam.crest && (
+                      <Image
+                        src={match.awayTeam.crest}
+                        width={25}
+                        height={25}
+                        alt="Away Team Crest"
+                      />
+                    )}
+                    {match.awayTeam.shortName ||
+                      match.awayTeam.name ||
+                      "- TBD -"}
                   </p>
                 </AccordionTrigger>
                 <AccordionContent className="py-2" asChild>
