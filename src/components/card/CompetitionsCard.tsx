@@ -38,7 +38,7 @@ export default async function CompetitionsCard({
                   variant="ghost"
                   size="icon"
                   className={cn(
-                    "mx-auto flex h-auto w-full flex-col items-center justify-start gap-3 border px-3 py-2 text-center md:flex-row",
+                    "mx-auto flex h-full w-full flex-col items-center justify-center gap-3 border px-3 py-2 text-center md:flex-row md:justify-start",
                     false &&
                       "rounded-bl-none rounded-br-none md:rounded-bl-md md:rounded-tr-none",
                   )}
