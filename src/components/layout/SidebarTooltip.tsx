@@ -17,7 +17,7 @@ export default function SidebarTooltip({
   children: React.ReactNode;
 }) {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={100} skipDelayDuration={50}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Link
