@@ -216,9 +216,9 @@ export default function MatchesCard({
                   showArrow={false}
                 >
                   <p className="flex items-center justify-end gap-2 text-ellipsis text-sm">
-                    {match.homeTeam.shortName ||
-                      match.homeTeam.name ||
-                      "- TBD -"}
+                    {match.homeTeam.shortName || match.homeTeam.name || (
+                      <span className="text-warning">TBD</span>
+                    )}
                     {match.homeTeam.crest && (
                       <Image
                         src={match.homeTeam.crest}
@@ -302,9 +302,9 @@ export default function MatchesCard({
                         alt="Away Team Crest"
                       />
                     )}
-                    {match.awayTeam.shortName ||
-                      match.awayTeam.name ||
-                      "- TBD -"}
+                    {match.awayTeam.shortName || match.awayTeam.name || (
+                      <span className="text-warning">TBD</span>
+                    )}
                   </p>
                 </AccordionTrigger>
                 <AccordionContent className="py-2" asChild>
