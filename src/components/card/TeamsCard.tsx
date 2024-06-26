@@ -30,9 +30,10 @@ export default async function TeamsCard({
   className?: string;
 }) {
   const session = await getServerAuthSession();
-  const totalPages = 636;
+  const totalPages = 690;
   const page = (searchParams.page ?? 1) as number;
   const { teams } = await fetchTeams({ page });
+  console.log({ teams });
 
   return (
     <CollapsibleCard title="Teams" className={className}>
@@ -46,13 +47,16 @@ export default async function TeamsCard({
                 userId: session.user.id,
               }));
             return (
-              <div className="flex w-full flex-col" key={team.id}>
+              <div
+                className="flex w-full flex-col overflow-hidden rounded-md border"
+                key={team.id}
+              >
                 <Button
                   asChild
                   variant="ghost"
                   size="icon"
                   className={cn(
-                    "flex h-32 w-full flex-col justify-center rounded-b-none border px-2",
+                    "flex h-32 w-full flex-col justify-center rounded-none rounded-b-none border border-none px-2",
                     !team.tla && "pointer-events-none opacity-35",
                   )}
                 >
@@ -80,7 +84,7 @@ export default async function TeamsCard({
                     team={team.id}
                     teamName={team.name}
                     user={session.user.id}
-                    className="rounded-t-none"
+                    className="rounded-none border-none"
                   />
                 )}
               </div>

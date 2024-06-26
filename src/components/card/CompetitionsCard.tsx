@@ -8,7 +8,6 @@ import { Button } from "~/components/ui/button";
 import CollapsibleCard from "~/components/card/CollapsibleCard";
 import { getServerAuthSession } from "~/server/auth";
 import FollowCompetitionButton from "../FollowCompetitionButton";
-import { cn } from "~/lib/utils";
 
 export default async function CompetitionsCard({
   className,
@@ -32,16 +31,12 @@ export default async function CompetitionsCard({
             return (
               <div
                 key={competition.id}
-                className="flex w-full flex-col md:flex-row"
+                className="flex w-full flex-col overflow-hidden rounded-md border md:flex-row"
               >
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={cn(
-                    "mx-auto flex h-full w-full flex-col items-center justify-center gap-3 border px-3 py-2 text-center md:flex-row md:justify-start",
-                    false &&
-                      "rounded-bl-none rounded-br-none md:rounded-bl-md md:rounded-tr-none",
-                  )}
+                  className="mx-auto flex h-full w-full flex-col items-center justify-center gap-3 rounded-none border-none px-3 py-2 text-center md:flex-row md:justify-start"
                   asChild
                 >
                   <Link href={`/dashboard/competitions/${competition.code}`}>
@@ -66,7 +61,7 @@ export default async function CompetitionsCard({
                     competition={competition.code}
                     competitionName={competition.name}
                     user={session.user.id}
-                    className="rounder h-9 w-full rounded-tl-none rounded-tr-none md:h-full md:w-28 md:rounded-bl-none md:rounded-tr-md"
+                    className="h-9 w-full rounded-none border-none md:h-full md:w-28"
                   />
                 )}
               </div>
