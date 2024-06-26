@@ -24,7 +24,6 @@ export default function FollowTeamButton({
   className?: string;
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(!!following);
   const [followingId, setFollowingId] = useState<number>(followId ?? 0);
 
@@ -34,7 +33,6 @@ export default function FollowTeamButton({
       if (follow) {
         setFollowingId(follow.id);
         setIsFollowing(follow.active);
-        setIsLoading(false);
         if (follow.active) {
           toast.success(`Followed ${teamName}`);
         } else {
@@ -42,6 +40,9 @@ export default function FollowTeamButton({
         }
       }
       router.refresh();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -58,9 +59,9 @@ export default function FollowTeamButton({
       }
       className={className}
       variant={isFollowing ? "outline" : "default"}
-      disabled={isLoading}
+      disabled={handleClick.isPending}
     >
-      {isLoading ? (
+      {handleClick.isPending ? (
         <Loader2Icon className="h-4 w-4 animate-spin" />
       ) : isFollowing ? (
         "Unfollow"

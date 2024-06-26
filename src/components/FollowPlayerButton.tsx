@@ -24,7 +24,6 @@ export default function FollowPlayerButton({
   className?: string;
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(!!following);
   const [followingId, setFollowingId] = useState<number>(followId ?? 0);
 
@@ -34,7 +33,6 @@ export default function FollowPlayerButton({
       if (follow) {
         setFollowingId(follow.id);
         setIsFollowing(follow.active);
-        setIsLoading(false);
         if (follow.active) {
           toast.success(`Followed ${playerName}`);
         } else {
@@ -42,6 +40,9 @@ export default function FollowPlayerButton({
         }
       }
       router.refresh();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -58,10 +59,10 @@ export default function FollowPlayerButton({
       }
       className={className}
       variant={isFollowing ? "outline" : "default"}
-      disabled={isLoading}
+      disabled={handleClick.isPending}
     >
-      {isLoading ? (
-        <Loader2Icon className="h-4 w-4 animate-spin" />
+      {handleClick.isPending ? (
+        <Loader2Icon className="my-2 h-4 w-4 animate-spin" />
       ) : isFollowing ? (
         "Unfollow"
       ) : (
