@@ -2,7 +2,7 @@ import React from "react";
 import MobileSidebar from "~/components/layout/MobileSidebar";
 import ProfileNavigation from "~/components/layout/ProfileNavigation";
 import { BreadcrumbResponsive } from "~/components/layout/Breadcrumbs";
-import { CommandBar } from "~/components/layout/Command";
+// import { CommandBar } from "~/components/layout/Command";
 
 export default function Header() {
   return (
@@ -16,7 +16,7 @@ export default function Header() {
         </div>
         {/* Command Search Modal and Profile Settings */}
         <div className="flex items-center gap-4">
-          <CommandBar />
+          {/* <CommandBar /> */}
           <ProfileNavigation />
         </div>
       </div>
